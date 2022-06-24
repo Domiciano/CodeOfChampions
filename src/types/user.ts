@@ -3,4 +3,5 @@ export type UserType = {
   born: number, 
   first: string,
   id: string,
+  role: 'teacher' | 'student'
 };

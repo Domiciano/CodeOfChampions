@@ -1,17 +1,21 @@
-import React from 'react'
-import { auth } from '../utils/firebase-functions/getFirebaseInit';
-import { userAuthInitStateType, logOutUser } from '../store/userAuth-slice';
+import React, {useEffect} from 'react'
+import { auth, db } from '../utils/firebase-functions/getFirebaseInit';
+import { userAuthInitStateType, logOutUser, setOnAuthState } from '../store/userAuth-slice';
 import { useSelector, useDispatch } from 'react-redux';
 
-const DummyTitle = () => {
-  const currentUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user); 
+const DummyTitle: React.FunctionComponent<{callback: Function}> = ({callback}) => {
+  const currentUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
   const dispatch = useDispatch();
   const handleSIgnOut = () => {
     dispatch(logOutUser(auth));
+    callback();
   }
+  useEffect(() => {
+    dispatch(setOnAuthState(auth, db));
+  }, [dispatch]);
   return (
     <div>
-      {currentUser && <h2>{currentUser.first}</h2>}
+      {currentUser && <h2>{`${currentUser.first} | ${currentUser.last} | ${currentUser.born}`}</h2>}
       <button onClick={handleSIgnOut}>Click me to signOut</button>
     </div>
   )

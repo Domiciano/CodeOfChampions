@@ -20,13 +20,11 @@ import { Link } from "react-router-dom";
 
 const  App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn); 
-  console.log(isLoggedIn);
-  // const currentUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user); 
+  const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn);
   const [usersData, setUserData] = useState<UserType[]>([]);
   const [isLOading, setIsLOading] = useState<boolean>(false);
 
-  useEffect(() => {
+  const setAllUsersData = () => {
     setIsLOading(true);
     setUserData([]);
     fetchAllUsers(db, (docData: DocumentData) => {
@@ -34,43 +32,58 @@ const  App = () => {
         return [...prev, setUserDataFromObj(docData)]
       });
     })
-      .then(() => setIsLOading(false));
+      .then(() => setIsLOading(false))
+      .catch(error => {
+        console.log('Error:', error.code, error.message);
+      })
+  }
+
+  useEffect(() => {
+    setAllUsersData();
     dispatch(setOnAuthState(auth, db));
   }, [dispatch]);
 
   // * Create user from Email and Password
-  const onCreateNewUser = () => {
-    const callback = () => {
-      setUserData([])
-      fetchAllUsers(db, (docData: DocumentData) => {
-        setUserData(prev => {
-          return [...prev, setUserDataFromObj(docData)]
-        });
-      });
-    }
+  const onCreateNewUser = (user: string) => {
     const dummyUser: UserType = {
-      first: "TryCatchStuff AAAAJJ",
-      last: "Lovelace",
-      born: 1815,
-      id: ''
+      first: user,
+      last: "San",
+      born: 2001,
+      id: '',
+      role: 'student'
     }
-    dispatch(addNewUserToFirestore(db, dummyUser, auth, callback, 'ty@mail.com', 'Ergo007/'))
+    dispatch(addNewUserToFirestore(db, dummyUser, auth, setAllUsersData, `${user}@mail.com`, 'Ergo007/'))
+    .then()
+    .catch(error => {
+      console.log('SIP')
+    })
   }
   // * Login User By Email and Password
-  const handleLogin = () => {
-    dispatch(logUserAsync(auth, db, 'daniel@mail.com', 'Ergo007/'));
+  const handleLoginTeacher = () => {
+    dispatch(logUserAsync(auth, db, 'ty@mail.com', 'Ergo007/', setAllUsersData));
+  }
+  const handleLoginStudent = () => {
+    dispatch(logUserAsync(auth, db, 'student@mail.com', 'Ergo007/', setAllUsersData));
+  }
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e: any) => {
+    e.preventDefault();
+    console.log(e.target.user.value);
+    onCreateNewUser(e.target.user.value);
   }
   return (
     <div className="App">
-      <DummyTitle/>
-      <Link to="/home">Home</Link>
-      <button onClick={onCreateNewUser}>Click me to Auth</button>
-      <button onClick={handleLogin}>Click me to login</button>
+      <DummyTitle callback={setAllUsersData}/>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="user" />
+        <button>Click me to Auth</button>
+      </form>
+      <button onClick={handleLoginTeacher}>Click me to login as Teacher</button>
+      <button onClick={handleLoginStudent}>Click me to login as Student</button>
       {isLoggedIn && <p>There is a user bby</p>}
       {isLOading && <p>Loading</p>}
       <ul>
-        <b>Users: {usersData.length}</b>
-        {usersData.map(data => <li key={Math.random().toString()}>{data.first}</li>)}
+        <b>Users (students): {usersData.length}</b>
+        {usersData.map(data => <li key={Math.random().toString()}><Link to={`/user-detail/${data.id}`}>{data.first}</Link></li>)}
       </ul>
     </div>
   );
