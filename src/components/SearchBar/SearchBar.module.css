@@ -1,0 +1,22 @@
+.search-bar {
+  border: 2px solid var(--second-black);
+  border-radius: var(--border);
+  padding: var(--size1) var(--size2);
+  display: flex;
+  align-items: center;
+  gap: var(--size2)
+}
+
+.search-bar input{
+  width: 100%;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: var(--h2);
+  font-weight: 600;
+  color: var(--second-white);
+}
+
+.search-bar input::placeholder{
+  color: var(--second-white);
+}
