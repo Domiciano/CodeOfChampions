@@ -1,0 +1,16 @@
+import React from 'react';
+import styles from './EmailIcon.module.css';
+
+interface EmailIconInterface {
+  style?: string;
+}
+
+const EmailIcon: React.FC<EmailIconInterface> = ({ style }) => {
+  return (
+    <svg className={`${style} ${styles['email']}`} width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0.05625 1.99938C0.16967 1.5024 0.448487 1.05866 0.847037 0.740847C1.24559 0.423029 1.74025 0.249966 2.25 0.25H15.75C16.2598 0.249966 16.7544 0.423029 17.153 0.740847C17.5515 1.05866 17.8303 1.5024 17.9437 1.99938L9 7.46575L0.05625 1.99938ZM0 3.28413V11.2761L6.52837 7.27338L0 3.28413ZM7.60613 7.93375L0.214875 12.4641C0.397492 12.8492 0.685717 13.1745 1.046 13.4021C1.40629 13.6298 1.82382 13.7504 2.25 13.75H15.75C16.1761 13.7501 16.5935 13.6292 16.9536 13.4014C17.3136 13.1735 17.6016 12.8481 17.784 12.463L10.3927 7.93263L9 8.78425L7.60613 7.93263V7.93375ZM11.4716 7.2745L18 11.2761V3.28413L11.4716 7.27338V7.2745Z" fill="none"/>
+    </svg>
+  )
+}
+
+export default EmailIcon;

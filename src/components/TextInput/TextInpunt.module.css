@@ -1,0 +1,30 @@
+.text-input {
+  display: flex;
+  align-items: center;
+  gap: var(--size3);
+  border-bottom: 2px solid var(--second-black);
+}
+
+.text-input label {
+  width: 100%;
+}
+
+.text-input label p {
+  color: var(--main-white);
+  font-weight: 600;
+}
+
+.text-input label input {
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: var(--h2);
+  outline: none;
+  font-size: var(--h2);
+  color: var(--second-white);
+}
+
+.text-input label input::placeholder {
+  color: var(--second-white);
+  font-size: var(--h2);
+}

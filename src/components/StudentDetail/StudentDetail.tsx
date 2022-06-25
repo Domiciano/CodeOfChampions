@@ -6,6 +6,7 @@ import { UserType } from '../../types/user';
 import { getCurrentUser } from '../../utils/firebase-functions/getCurrentUser';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import { setUserDataFromObj } from '../../utils/firebase-functions/setUserDataFromObj';
+import styles from './StudentDetail.module.css';
 
 const StudentDetail = () => {
   const navigate = useNavigate();
@@ -42,12 +43,12 @@ const StudentDetail = () => {
   return (
     <>
       {user && (
-        <>
+        <div className={styles['student-detail']}>
           <h1>{user?.first}</h1>
           <p><b>Last:</b> {user?.last}</p>
           <p><b>Born:</b> {user?.born}</p>
           <p><b>ID:</b> {user?.id}</p>
-        </>
+        </div>
       )}
       <Link to="/">Home</Link>
     </>

@@ -1,0 +1,10 @@
+.main-btn{
+  background-color: var(--app-color);
+  border-radius: var(--border);
+  border: none;
+  outline: none;
+  padding: var(--size1);
+  width: 100%;
+  font-weight: 500;
+  font-size: var(--h2)
+}

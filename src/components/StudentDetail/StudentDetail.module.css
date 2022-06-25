@@ -1,0 +1,6 @@
+.student-detail{
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1);
+  color: var(--main-black);
+}

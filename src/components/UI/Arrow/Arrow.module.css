@@ -1,0 +1,11 @@
+.arrow path {
+  fill: var(--second-white);
+}
+
+.right {
+  transform: rotate(-180deg)
+}
+
+.white path {
+  fill: var(--main-white) !important;
+}

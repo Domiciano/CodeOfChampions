@@ -1,0 +1,13 @@
+.login{
+  background-color: var(--main-black);
+  width: 100vw;
+  height: 100vh;
+  padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.icon path{
+  fill: var(--main-white);
+}
