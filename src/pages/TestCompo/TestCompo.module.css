@@ -1,0 +1,36 @@
+.login{
+  background-color: var(--main-black);
+  width: 100vw;
+  min-height: 100vh;
+  padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.icon path{
+  fill: var(--main-white);
+}
+
+/* delete the following */
+
+.profiles {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile {
+  display: flex;
+  padding: var(--size2);
+  gap: var(--size2);
+  border-bottom: 2px solid var(--second-black);
+}
+
+.profile:last-child {
+  border-bottom: none;
+}
+
+.profile p {
+  font-size: var(--h2);
+  color: var(--main-white);
+}

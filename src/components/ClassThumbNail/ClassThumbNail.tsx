@@ -5,20 +5,23 @@ import usersIcon from '../../img/svg/users.svg';
 import Arrow from '../UI/Arrow/Arrow';
 
 interface ClassThumbNailInterface {
-
+  term: string;
+  schedule: string;
+  studentsQuantity: number
+  isActive: boolean;
 }
 
-const ClassThumbNail: React.FC<ClassThumbNailInterface> = () => {
+const ClassThumbNail: React.FC<ClassThumbNailInterface> = ({ term, schedule, studentsQuantity, isActive }) => {
   return (
-    <Link to="/" className={styles['class-thumbnail']}>
+    <Link to="/" className={`${styles['class-thumbnail']} ${!isActive ? styles['class-thumbnail--inactive'] : ''}`}>
       <div className={styles['class-thumbnail__main-info']}>
-        <h3>2022/2</h3>
-        <p>Thursday, Wednesday, 7am-9am</p>
+        <h3>{term}</h3>
+        <p>{schedule}</p>
       </div>
       <div className={styles['class-thumbnail__bottom-elem']}>
         <div className={styles['class-thumbnail__students']}>
           <img src={usersIcon} alt="users" />
-          <p>Students: <b>31</b></p>
+          <p>Students: <b>{studentsQuantity}</b></p>
         </div>
         <Arrow right/>
       </div>

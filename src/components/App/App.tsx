@@ -4,7 +4,7 @@ import { userAuthInitStateType, setOnAuthState } from '../../store/userAuth-slic
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { Route, Routes } from "react-router-dom";
 // * Pages
-import Login from '../../pages/Login/Login';
+import TestCompo from '../../pages/TestCompo/TestCompo';
 
 const  App = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const  App = () => {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login/>} ></Route>
+        <Route path="/test" element={<TestCompo/>} ></Route>
         <Route path="/" element={<h1>si</h1>} ></Route>
         {/* <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route> */}
       </Routes>

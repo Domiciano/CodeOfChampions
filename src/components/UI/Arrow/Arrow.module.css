@@ -9,3 +9,7 @@
 .white path {
   fill: var(--main-white) !important;
 }
+
+.black path {
+  fill: var(--main-black) !important;
+}

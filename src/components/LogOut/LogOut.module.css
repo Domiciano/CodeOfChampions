@@ -1,0 +1,9 @@
+.log-out {
+  border: none;
+  background: none;
+  display: flex;
+  gap: var(--size2);
+  color: var(--second-white);
+  font-size: var(--h2);
+  align-items: center;
+}

@@ -30,6 +30,9 @@ code {
   --apprentice: linear-gradient(0deg, rgba(252,234,187,1) 0%, rgba(248,181,0,1) 100%);
   --killer: linear-gradient(0deg, rgba(255,137,116,1) 0%, rgba(190,45,31,1) 100%);
   --learning: linear-gradient(0deg, rgba(160,68,255,1) 0%, rgba(84,27,125,1) 100%);
+  --first-rank: #EDB942;
+  --second-rank: #857F92;
+  --third-rank: #F4B887;
   /* Gaps */
   --size1: 4px;
   --size2: 9px;
@@ -46,5 +49,6 @@ code {
   --h2: 16px;
   --h3: 18px;
   --h4: 22px;
-  --h5: 18px;
+  --h5: 28px;
+  --h6: 30px;
 }

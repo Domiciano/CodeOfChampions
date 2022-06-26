@@ -45,3 +45,7 @@
 .class-thumbnail__students p{
   font-size: var(--h2);
 }
+
+.class-thumbnail--inactive {
+  opacity: .4;
+}
