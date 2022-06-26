@@ -11,10 +11,9 @@ const LogOut = () => {
   const navigate = useNavigate();
   
   const handleSIgnOut = () => {
-    dispatch(logOutUser(auth))
-    .then(() => {
-      navigate('/');
-    })
+    dispatch(logOutUser(auth, () => {
+      navigate('/login');
+    }))
   }
 
   return (
@@ -25,4 +24,4 @@ const LogOut = () => {
   )
 }
 
-export default LogOut
+export default LogOut;

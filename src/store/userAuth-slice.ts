@@ -50,7 +50,8 @@ export const logUserAsync = (
   db: Firestore,
   email: string,
   password: string,
-  callback?: Function
+  callback?: Function,
+  errorCallback?: (errorCode:string, errorMessage:string) => void
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -69,7 +70,8 @@ export const logUserAsync = (
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage, "ERROR LOGIN USER");
+        // console.log(errorCode, errorMessage, "ERROR LOGIN USER");
+        if(errorCallback) errorCallback(errorCode, errorMessage);
       });
   };
 };
@@ -110,13 +112,15 @@ export const setOnAuthState = (auth: Auth, db: Firestore) => {
 };
 
 // * Login out from Firebase Auth, and updating the userAuth State by setting the dispatch
-export const logOutUser = (auth: Auth) => {
+export const logOutUser = (auth: Auth, callback?: Function) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
         console.log("Congrats, sign out successful");
         dispatch(userLoginSlice.actions.logout());
+        if (callback) callback();
+
       })
       .catch((error) => {
         // An error happened.

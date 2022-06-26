@@ -1,0 +1,7 @@
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--size2);
+  color: var(--error);
+  font-weight: 600;
+}

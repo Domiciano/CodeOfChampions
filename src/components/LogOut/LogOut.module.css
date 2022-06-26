@@ -6,4 +6,5 @@
   color: var(--second-white);
   font-size: var(--h2);
   align-items: center;
+  width: fit-content;
 }

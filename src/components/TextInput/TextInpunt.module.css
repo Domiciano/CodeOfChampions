@@ -28,3 +28,7 @@
   color: var(--second-white);
   font-size: var(--h2);
 }
+
+.error {
+  border-bottom: 2px solid var(--error); 
+}

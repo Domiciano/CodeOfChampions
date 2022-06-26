@@ -41,6 +41,7 @@ const TestCompo = () => {
         }}
         placeholder="Write a strong password"
         label="Password"
+        value=''
       />
       {modalActive && <Modal onCancelBtnAction={ () => {setModalActive(false)}} >
         <p>sipppp</p>

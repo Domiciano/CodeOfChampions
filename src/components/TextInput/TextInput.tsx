@@ -6,24 +6,28 @@ interface TextInputInterface {
   onChangeInputValue: Function;
   label: string;
   placeholder: string;
+  value: string;
+  isPassword?: boolean;
+  isError?: boolean;
 }
 
 
-const TextInput: React.FC<TextInputInterface> = ({ icon, onChangeInputValue, placeholder, label }) => {
+const TextInput: React.FC<TextInputInterface> = ({ icon, onChangeInputValue, placeholder, label, value, isPassword, isError }) => {
 
   const handleOnchangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     onChangeInputValue(e.target.value);
   }
 
   return (
-    <div className={styles['text-input']}>
+    <div className={`${styles['text-input']} ${isError? styles['error'] : ''}`}>
       {icon&& icon}
       <label>
         <p>{label}</p>
         <input 
           onChange={handleOnchangeInput} 
-          type="text" 
+          type={isPassword ? 'password' : 'text'}
           placeholder={placeholder}
+          value={value}
         ></input>
       </label>
     </div>

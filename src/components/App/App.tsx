@@ -5,6 +5,8 @@ import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { Route, Routes } from "react-router-dom";
 // * Pages
 import TestCompo from '../../pages/TestCompo/TestCompo';
+import Login from '../../pages/Login/Login';
+import Home from '../../pages/Home/Home';
 
 const  App = () => {
   const dispatch = useDispatch();
@@ -45,7 +47,8 @@ const  App = () => {
     <>
       <Routes>
         <Route path="/test" element={<TestCompo/>} ></Route>
-        <Route path="/" element={<h1>si</h1>} ></Route>
+        <Route path="/login" element={<Login/>} ></Route>
+        <Route path="/" element={<Home/>} ></Route>
         {/* <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route> */}
       </Routes>
     </>
