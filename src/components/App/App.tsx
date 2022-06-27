@@ -2,11 +2,15 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAuthInitStateType, setOnAuthState } from '../../store/userAuth-slice';
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 // * Pages
 import TestCompo from '../../pages/TestCompo/TestCompo';
 import Login from '../../pages/Login/Login';
 import Home from '../../pages/Home/Home';
+import SignUp from '../../pages/SignUp/SignUp';
+import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
+import StudentDetail from '../StudentDetail/StudentDetail';
+
 
 const  App = () => {
   const dispatch = useDispatch();
@@ -46,10 +50,13 @@ const  App = () => {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Home/>} ></Route>
         <Route path="/test" element={<TestCompo/>} ></Route>
         <Route path="/login" element={<Login/>} ></Route>
-        <Route path="/" element={<Home/>} ></Route>
-        {/* <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route> */}
+        <Route path="/sign-up" element={<SignUp/>} ></Route>
+        <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route>
+        <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

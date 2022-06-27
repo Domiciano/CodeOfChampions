@@ -1,0 +1,24 @@
+.select-class-thumb {
+  padding: var(--size2);
+  border-bottom: 2px solid var(--second-black);
+}
+
+.select-class-thumb__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.select-class-thumb__header h3 {
+  color: var(--main-white);
+  font-size: var(--h2);
+}
+
+.select-class-thumb__header p {
+  color: var(--second-white);
+  font-size: var(--h1);
+}
+
+.select-class-thumb__footer {
+  color: var(--second-white);
+}

@@ -6,6 +6,7 @@
     * Email: String
     * Classes: Class[]
     * id: String
+    * isVerified: Boolean
 * **Class**
     * IsActive: Boolean
     * Profiles: Profile[]
@@ -17,7 +18,7 @@
     * Topics: Topic[]
 * **Topic**
     * Name: String
-    * QuestionsPerRole:
+    * ActivityPerRole:
         * Role1: number
         * Role2: number
         * …n
@@ -31,3 +32,4 @@
     * StudentId: String
     * Profile: Profile
     * Points: number
+    * BelongedClassId: String

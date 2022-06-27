@@ -15,7 +15,7 @@ const DummyTitle: React.FunctionComponent<{callback: Function}> = ({callback}) =
   }, [dispatch]);
   return (
     <div>
-      {currentUser && <h2>{`${currentUser.first} | ${currentUser.last} | ${currentUser.born}`}</h2>}
+      {currentUser && <h2>{`${currentUser.name} | ${currentUser.id} | ${currentUser.email}`}</h2>}
       <button onClick={handleSIgnOut}>Click me to signOut</button>
     </div>
   )

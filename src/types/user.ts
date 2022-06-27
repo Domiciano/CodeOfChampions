@@ -1,7 +1,17 @@
 export type UserType = {
-  last: string, 
-  born: number, 
-  first: string,
+  name: string, 
   id: string,
-  role: 'teacher' | 'student'
+  email: string,
+  role: 'teacher' | 'student',
 };
+
+export type TeacherType = UserType & {
+  classesId: string[],
+  isVerified: boolean
+}
+
+export type StudentType = UserType & {
+  profile: 'apprentice' | 'killer' | 'learning',
+  points: number,
+  belongedClassId: string,
+}

@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, AnyAction } from "@reduxjs/toolkit";
-import { UserType } from "../types/user";
+import { StudentType, TeacherType } from "../types/user";
 import { Firestore } from "firebase/firestore";
 import { setUserDataFromObj } from "../utils/firebase-functions/setUserDataFromObj";
 import {
@@ -15,7 +15,7 @@ import { getCurrentUser } from "../utils/firebase-functions/getCurrentUser";
 // * Initial state Type
 export type userAuthInitStateType = {
   isLoggedIn: boolean;
-  user: null | UserType;
+  user: null | TeacherType | StudentType;
   isFetchingCurrentUser: boolean;
 };
 
@@ -79,10 +79,8 @@ export const logUserAsync = (
 // * Setting up current auth state, wether there is a current session or not
 export const setOnAuthState = (auth: Auth, db: Firestore) => {
   return async (dispatch: Dispatch<AnyAction>) => {
-    dispatch(
-      userLoginSlice.actions.setFetchingCurrentUserState({ state: true })
-    );
     onAuthStateChanged(auth, (user) => {
+      dispatch(userLoginSlice.actions.setFetchingCurrentUserState({ state: true }));
       if (user) {
         // User is signed in, see docs for a list of available properties
         console.log("There is a user");
@@ -99,14 +97,13 @@ export const setOnAuthState = (auth: Auth, db: Firestore) => {
           .catch((error) => {
             console.log(error.code, error.message, Object.keys(error));
           });
+        // dispatch(userLoginSlice.actions.setFetchingCurrentUserState({ state: false }));
       } else {
         // User is signed out
         dispatch(userLoginSlice.actions.login({ user: null }));
         console.log("There is no user");
+        dispatch(userLoginSlice.actions.setFetchingCurrentUserState({ state: false }));
       }
-      dispatch(
-        userLoginSlice.actions.setFetchingCurrentUserState({ state: false })
-      );
     });
   };
 };
@@ -120,7 +117,6 @@ export const logOutUser = (auth: Auth, callback?: Function) => {
         console.log("Congrats, sign out successful");
         dispatch(userLoginSlice.actions.logout());
         if (callback) callback();
-
       })
       .catch((error) => {
         // An error happened.
@@ -131,11 +127,11 @@ export const logOutUser = (auth: Auth, callback?: Function) => {
 
 export const addNewUserToFirestore = (
   db: Firestore,
-  userData: UserType,
+  userData: TeacherType | StudentType,
   auth: Auth,
   callback: Function,
   email: string,
-  password: string
+  password: string,
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     createUserWithEmailAndPassword(auth, email, password)

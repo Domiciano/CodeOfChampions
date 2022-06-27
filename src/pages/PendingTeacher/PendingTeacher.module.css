@@ -1,0 +1,38 @@
+.pending {
+  background-color: var(--app-color);
+  min-width: 100vw;
+  min-height: 100vh;
+  position: relative;
+  color: var(--main-black);
+}
+
+.pending__info {
+  width: 100%;
+  padding: var(--size3) 10%;
+  display: flex;
+  gap: var(--size2);
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -80%)
+}
+
+.pending__info h3 {
+  font-size: var(--h4);
+  text-align: center;
+}
+
+.pending__info p * {
+  color: var(--main-black);
+  font-size: var(--h3);
+}
+
+.pending__info p * b {
+  text-decoration: underline;
+}
+
+.pending__info p *:link {
+  text-decoration: none;
+}

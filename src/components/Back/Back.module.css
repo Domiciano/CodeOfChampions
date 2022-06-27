@@ -1,0 +1,13 @@
+.back {
+  border: none;
+  background: none;
+  display: flex;
+  gap: var(--size2);
+  align-items: center;
+  width: fit-content;
+}
+
+.back p {
+  font-size: var(--h2);
+  color: var(--second-white);
+}
