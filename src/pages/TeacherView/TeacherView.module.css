@@ -1,0 +1,49 @@
+.teacher-view {
+  display: flex;
+  flex-direction: column;
+  min-width: 100vw;
+  min-height: 100vh;
+  padding: var(--size3);
+  gap: var(--size3);
+}
+
+.teacher-view button:first-child {
+  align-self: flex-end;
+}
+
+.teacher-view h1{
+  color: var(--second-white);
+  font-size: var(--h5);
+}
+
+.teacher-view h1 b{
+  color: var(--main-white);
+}
+
+.teacher-view__class-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.teacher-view__class-actions button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.teacher-view__class-actions button img{
+  width: 30px;
+}
+
+.teacher-view__class-actions p {
+  font-size: var(--h4);
+  color: var(--main-white);
+
+}
+
+.teacher-view__classes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3);
+}

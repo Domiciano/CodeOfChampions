@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { StudentType, TeacherType } from "../../types/user";
-import LogOut from '../../components/LogOut/LogOut';
-import { useDispatch, useSelector } from "react-redux";
+import { isTeacherType } from "../../types/user";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setOnAuthState, userAuthInitStateType } from '../../store/userAuth-slice';
-import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
+import { userAuthInitStateType } from '../../store/userAuth-slice';
+import TeacherView from '../TeacherView/TeacherView';
+// import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 
 const Home = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -13,19 +13,15 @@ const Home = () => {
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   
-  function isTeacherType(obj: any): obj is TeacherType {
-    return obj.isVerified !== undefined 
-  }
+  
 
   useEffect(() => {
-    console.log(isFetchingCurrentUser)
     if(!isFetchingCurrentUser){
       console.log('AAA', isLoggedIn)
       // * At this moment, the fetch process is finished
       // TODO: Check if there is a user login
       if(!isLoggedIn){
         navigate("/login");
-        console.log('ehhh??');
       }  
     }
 
@@ -39,8 +35,12 @@ const Home = () => {
 
   return (
     <div>
-      <LogOut/>
-      <p>{loggedUser?.name}</p>
+      {(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)) ? 
+        <TeacherView teacherUser={loggedUser}/> :
+        <>
+          <p>{loggedUser?.name}</p>
+        </>
+      }
     </div>
   )
 }

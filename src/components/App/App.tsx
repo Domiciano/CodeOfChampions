@@ -10,6 +10,7 @@ import Home from '../../pages/Home/Home';
 import SignUp from '../../pages/SignUp/SignUp';
 import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
 import StudentDetail from '../StudentDetail/StudentDetail';
+import CreateClass from '../../pages/CreateClass/CreateClass';
 
 
 const  App = () => {
@@ -56,6 +57,7 @@ const  App = () => {
         <Route path="/sign-up" element={<SignUp/>} ></Route>
         <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route>
         <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
+        <Route path="/create-class" element={<CreateClass/>}></Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

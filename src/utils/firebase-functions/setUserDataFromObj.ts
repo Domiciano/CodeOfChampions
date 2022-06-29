@@ -20,7 +20,7 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       email, 
       id, 
       role, 
-      classesId: docData.classId,
+      classesId: docData.classId || [] ,
       isVerified: docData.isVerified
     }
     return teacherData

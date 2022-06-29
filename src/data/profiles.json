@@ -1,0 +1,36 @@
+{
+  "profiles": [
+    {
+      "name": "Apprentice",
+      "description": "bla bla bla",
+      "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.TezfuPbqMCDnp6K7R_f6bwHaFj%26pid%3DApi&f=1"
+    },
+    {
+      "name": "Killer",
+      "description": "bla bla bla",
+      "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.TezfuPbqMCDnp6K7R_f6bwHaFj%26pid%3DApi&f=1"
+    },
+    {
+      "name": "Learning",
+      "description": "bla bla bla",
+      "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.TezfuPbqMCDnp6K7R_f6bwHaFj%26pid%3DApi&f=1"
+    }
+  ],
+  "topics": [
+    {
+      "name": "Variables"
+    },
+    {
+      "name": "Conditionals"
+    },
+    {
+      "name": "Cycles"
+    },
+    {
+      "name": "Data Structures"
+    },
+    {
+      "name": "Functions"
+    }
+  ]
+}

@@ -22,7 +22,6 @@ const PendingTeacher = () => {
         <h3>Your account is being verified by us</h3>
         <p>Try <Link to="/login"><b>Login</b></Link> later on</p>
       </div>
-
     </div>
   )
 }

@@ -108,16 +108,16 @@ const SignUp = () => {
         <div className={styles['sign-up__fields']}>
           { role === 'student' &&
             <SelectDropDown ref={selectDropdownRef} placeholder={classSelect ? `${classSelect.teacher} - ${classSelect.term}` : "Select a Class"}>
-            <div className={styles['sign-up__classes']}>
-              {DUMMY_CLASSES.map( classData => <SelectClassThumbnail 
-                teacher={classData.teacher}
-                term={classData.term}
-                schedule={classData.schedule}
-                key={classData.classId} 
-                onClick={handleClassThumbClick.bind(null, classData)}
-              />)}
-            </div>
-          </SelectDropDown>
+              <div className={styles['sign-up__classes']}>
+                {DUMMY_CLASSES.map( classData => <SelectClassThumbnail 
+                  teacher={classData.teacher}
+                  term={classData.term}
+                  schedule={classData.schedule}
+                  key={classData.classId} 
+                  onClick={handleClassThumbClick.bind(null, classData)}
+                />)}
+              </div>
+            </SelectDropDown>
           }
           <TextInput
             icon={<UserIcon style={styles["icon"]} />}

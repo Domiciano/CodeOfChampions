@@ -15,3 +15,7 @@ export type StudentType = UserType & {
   points: number,
   belongedClassId: string,
 }
+
+export function isTeacherType(obj: any): obj is TeacherType {
+  return obj.isVerified !== undefined 
+}

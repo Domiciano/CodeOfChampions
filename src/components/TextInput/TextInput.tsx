@@ -3,7 +3,7 @@ import styles from './TextInpunt.module.css';
 
 interface TextInputInterface {
   icon?: JSX.Element;
-  onChangeInputValue: Function;
+  onChangeInputValue: (value: string, event?:  React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   placeholder: string;
   value: string;
@@ -15,7 +15,7 @@ interface TextInputInterface {
 const TextInput: React.FC<TextInputInterface> = ({ icon, onChangeInputValue, placeholder, label, value, isPassword, isError }) => {
 
   const handleOnchangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    onChangeInputValue(e.target.value);
+    onChangeInputValue(e.target.value, e);
   }
 
   return (
