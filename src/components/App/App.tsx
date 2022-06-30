@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { userAuthInitStateType, setOnAuthState } from '../../store/userAuth-slice';
+import { useDispatch } from 'react-redux';
+import { setOnAuthState } from '../../store/userAuth-slice';
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { Navigate, Route, Routes } from "react-router-dom";
 // * Pages
@@ -11,6 +11,7 @@ import SignUp from '../../pages/SignUp/SignUp';
 import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
 import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
+import { getActiveClasses } from '../../store/class-slice';
 
 
 const  App = () => {
@@ -19,6 +20,7 @@ const  App = () => {
   
   useEffect(() => {
     dispatch(setOnAuthState(auth, db));
+    dispatch(getActiveClasses(db));
   }, [dispatch]);
 
   // * Create user from Email and Password

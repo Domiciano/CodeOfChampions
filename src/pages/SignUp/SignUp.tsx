@@ -1,6 +1,6 @@
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StudentType, TeacherType } from "../../types/user";
 import styles from './SignUp.module.css';
 import Back from '../../components/Back/Back';
@@ -13,11 +13,13 @@ import UserIcon from '../../components/UI/UserIcon/UserIcon';
 import Lock from '../../components/UI/Lock/Lock';
 import MainBtn from '../../components/MainBtn/MainBtn';
 import { addNewUserToFirestore } from '../../store/userAuth-slice';
+import { InitialStateType } from '../../store/class-slice';
 
 const SignUp = () => {
   const location = useLocation();
   const role = new URLSearchParams(location.search).get('role');
   const navigate = useNavigate();
+  const activeClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.classesToSelect);
   const [classSelect, setClassSelect] = useState<{teacher: string, term: string, schedule: string, classId: string} | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,38 +29,12 @@ const SignUp = () => {
   const selectDropdownRef = useRef<any>();
   const dispatch = useDispatch();
 
-  const DUMMY_CLASSES = [
-    {
-      teacher: '1 Jose Luis',
-      term: '2022/2',
-      schedule: 'Martes, Miercoles, 7am - 9am',
-      classId: '1'
-    },
-    {
-      teacher: '2 Jose Luis',
-      term: '2022/2',
-      schedule: 'Martes, Miercoles, 7am - 9am',
-      classId: '2'
-    },
-    {
-      teacher: '3 Jose Luis',
-      term: '2022/2',
-      schedule: 'Martes, Miercoles, 7am - 9am',
-      classId: '3'
-    },
-    {
-      teacher: '4 Jose Luis',
-      term: '2022/2',
-      schedule: 'Martes, Miercoles, 7am - 9am',
-      classId: '4'
-    }
-  ]
-  
   useEffect(() => {
     if (!(role === 'teacher' || role === 'student')){
       navigate('/login')
     }
-  }, [navigate, role])
+    
+  }, [dispatch, navigate, role])
 
   const handleClassThumbClick = (classData: {teacher: string, term: string, schedule: string, classId: string}) => {
     setClassSelect(classData);
@@ -109,12 +85,17 @@ const SignUp = () => {
           { role === 'student' &&
             <SelectDropDown ref={selectDropdownRef} placeholder={classSelect ? `${classSelect.teacher} - ${classSelect.term}` : "Select a Class"}>
               <div className={styles['sign-up__classes']}>
-                {DUMMY_CLASSES.map( classData => <SelectClassThumbnail 
-                  teacher={classData.teacher}
+                {activeClasses.map( classData => <SelectClassThumbnail 
+                  teacher={classData.teacherName}
                   term={classData.term}
                   schedule={classData.schedule}
                   key={classData.classId} 
-                  onClick={handleClassThumbClick.bind(null, classData)}
+                  onClick={handleClassThumbClick.bind(null, {
+                    teacher: classData.teacherName,
+                    term: classData.term,
+                    schedule: classData.schedule,
+                    classId: classData.classId,
+                  })}
                 />)}
               </div>
             </SelectDropDown>

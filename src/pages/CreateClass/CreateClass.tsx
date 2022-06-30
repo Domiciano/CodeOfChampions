@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import styles from './CreateClass.module.css';
 import Back from '../../components/Back/Back';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { userAuthInitStateType } from '../../store/userAuth-slice';
 import { useNavigate } from "react-router-dom";
 import TextInput from '../../components/TextInput/TextInput';
@@ -11,23 +12,9 @@ import data from '../../data/profiles.json';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import plusIcon from '../../img/svg/plus.svg';
 import cancelIcon from '../../img/svg/cancel.svg';
+import { ProfileDataType, TopicDataType, ClassType } from '../../types/classes';
+import { addNewClass } from '../../store/class-slice';
 
-type ProfileDataType = {
-  isChecked: boolean;
-  name: string;
-  description: string;
-  img: string;
-}
-
-type TopicDataType = {
-  isChecked: boolean;
-  name: string;
-  activities: ActivityType[]
-}
-
-type ActivityType = {
-  rushMode: boolean;
-}
 
 const CreateClass = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -38,6 +25,7 @@ const CreateClass = () => {
   const [profiles, setProfiles] = useState<ProfileDataType[]>(data.profiles.map(profile => ({...profile, isChecked: false})));
   const [topics, setTopics] = useState<TopicDataType[]>(data.topics.map(profile => ({...profile, isChecked: false, activities: []})));
   const selectDropdownRef = useRef<any>();
+  const dispatch = useDispatch();
 
   const handleToggleProfile = (currentProfile: ProfileDataType) => {
     setProfiles(prev => {
@@ -93,8 +81,18 @@ const CreateClass = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log(profiles.filter(p => p.isChecked))
-    console.log(topics.filter(t => t.isChecked))
+    const classCreated: ClassType = {
+      term: term,
+      schedule: schedule,
+      profiles: profiles.filter(p => p.isChecked),
+      topics: topics.filter(t => t.isChecked),
+      teacherId: loggedUser?.id || 'NO ID',
+      classId: '',
+      isActive: true,
+      studentsId: []
+    }
+    console.log(classCreated);
+    dispatch(addNewClass(db, classCreated, () => {navigate("/")}));
   }
 
   useEffect(() => {
