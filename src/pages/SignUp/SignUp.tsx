@@ -12,22 +12,26 @@ import EmailIcon from '../../components/UI/EmailIcon/EmailIcon';
 import UserIcon from '../../components/UI/UserIcon/UserIcon';
 import Lock from '../../components/UI/Lock/Lock';
 import MainBtn from '../../components/MainBtn/MainBtn';
-import { addNewUserToFirestore } from '../../store/userAuth-slice';
+import { addNewUserToFirestore, logOutUser } from '../../store/userAuth-slice';
 import { InitialStateType } from '../../store/class-slice';
+import SelectProfiles from '../../components/SelectProfiles/SelectProfiles';
+import { SelectClassType, ProfileDataType } from '../../types/classes';
 
 const SignUp = () => {
   const location = useLocation();
   const role = new URLSearchParams(location.search).get('role');
   const navigate = useNavigate();
   const activeClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.classesToSelect);
-  const [classSelect, setClassSelect] = useState<{teacher: string, term: string, schedule: string, classId: string} | null>(null);
+  const [classSelect, setClassSelect] = useState<SelectClassType | null>(null);
   const [name, setName] = useState('');
+  const [classProfiles, setClassProfiles] = useState<ProfileDataType[]>([]);
   const [email, setEmail] = useState('');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const selectDropdownRef = useRef<any>();
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (!(role === 'teacher' || role === 'student')){
@@ -36,14 +40,22 @@ const SignUp = () => {
     
   }, [dispatch, navigate, role])
 
-  const handleClassThumbClick = (classData: {teacher: string, term: string, schedule: string, classId: string}) => {
+  const handleClassThumbClick = (classData: SelectClassType) => {
     setClassSelect(classData);
+    setClassProfiles(classData.profiles.map(profile => ({...profile, isChecked: false})))
     selectDropdownRef.current.close();
+  }
+
+  const handleChooseProfile = (index: number) => {
+    setClassProfiles(prev => {
+      const profilesCopy = prev.map(profile => ({...profile, isChecked: false}));
+      profilesCopy[index].isChecked = true;
+      return profilesCopy;
+    })
   }
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log(classSelect?.classId, name, email, id, password, confirmPassword);
     let userToPublish: StudentType | TeacherType;
     if(role === 'teacher'){
       userToPublish = {
@@ -59,15 +71,19 @@ const SignUp = () => {
         name,
         email,
         id: '',
-        role: 'teacher',
-        classesId: [],
-        isVerified: false
+        role: 'student',
+        profile: classProfiles.find(p => p.isChecked)?.name || "apprentice",
+        points: 0,
+        belongedClassId: classSelect?.classId || '',
       }
     }
+
     dispatch(addNewUserToFirestore(db, userToPublish, auth, () => {
       console.log('done');
       if(role === 'teacher'){
-        navigate('/teacher-pending');
+        dispatch(logOutUser(auth, () => {
+          navigate("/teacher-pending");
+        }))
       }else{
         navigate('/');
       }
@@ -91,10 +107,15 @@ const SignUp = () => {
                   schedule={classData.schedule}
                   key={classData.classId} 
                   onClick={handleClassThumbClick.bind(null, {
-                    teacher: classData.teacherName,
                     term: classData.term,
                     schedule: classData.schedule,
+                    profiles: classData.profiles,
+                    topics: classData.topics,
+                    teacherId: classData.teacherId,
                     classId: classData.classId,
+                    isActive: classData.isActive,
+                    studentsId: classData.studentsId,
+                    teacher: classData.teacherName,
                   })}
                 />)}
               </div>
@@ -147,6 +168,7 @@ const SignUp = () => {
             value={confirmPassword}
             isPassword
           />
+          {role === 'student' && classSelect && <SelectProfiles handleChooseProfile={handleChooseProfile} profilesData={classProfiles}/>}
         </div>
         <div className={styles['sign-up__footer']}>
           <MainBtn text="Sign Up" action={() => {}} />

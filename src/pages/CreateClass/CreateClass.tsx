@@ -179,7 +179,7 @@ const CreateClass = () => {
                 <div className={styles['create-class__topics__topic__activities']}>
                   {
                     topic.activities.map((activity, index) => (
-                      <div key={Math.random().toFixed(3)} className={styles['create-class__topics__topic__activity-container']}>
+                      <div key={Math.random().toFixed(5)} className={styles['create-class__topics__topic__activity-container']}>
                         <div className={styles['create-class__topics__topic__activity']}>
                           <p>{index + 1}. Activity</p>
                           <div 

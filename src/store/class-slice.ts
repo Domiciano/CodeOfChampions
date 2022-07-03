@@ -38,6 +38,8 @@ export const addNewClass = (db: Firestore, currentClass:ClassType,  callback?: F
         updateDoc(doc(db, `classes/${data.id}`), {classId: data.id})
           .then(() => {
             console.log("Class has been created");
+            // ! I do not know wether this is right
+            dispatch(getActiveClasses(db));
             if(callback) callback();
           })
       })
@@ -50,7 +52,6 @@ export const getTeacherClasses = (db: Firestore, userId: string) => {
     const querySnapshot = await  getDocs(teacherClasses);
     let currentClasses: ClassType[] = [];
     querySnapshot.forEach((doc) => {
-      console.log(doc.data());
       const {term, schedule, profiles, topics, teacherId, classId, isActive, studentsId} = doc.data();
       currentClasses.push({ term, schedule, profiles, topics, teacherId, classId, isActive, studentsId: studentsId || []});
     });

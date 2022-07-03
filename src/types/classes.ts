@@ -26,3 +26,7 @@ export type TopicDataType = {
 export type ActivityType = {
   rushMode: boolean;
 }
+
+export type SelectClassType = ClassType & {
+  teacher: string
+}

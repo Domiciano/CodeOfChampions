@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { TeacherType } from "../../types/user";
@@ -18,10 +18,6 @@ const TeacherView: React.FC<TeacherViewInterface> = ({teacherUser}) => {
   const handleCreateNewClass = () => {
     navigate('/create-class');
   }
-
-  useEffect(() => {
-    console.log(userClasses);
-  }, [userClasses]);
 
   return (
     <div className={styles['teacher-view']}>

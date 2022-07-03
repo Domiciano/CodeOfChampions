@@ -5,6 +5,7 @@ import {
 } from "firebase/firestore"; 
 
 export const getCurrentUser = async (uid: string, db: Firestore) => {
-  const docSnap = await getDoc(doc(db, `users/${uid}`));
+  // TODO: check if the current user exist on doc after a successful login, if not delete account from firebase auth
+  const docSnap = await getDoc(doc(db, "users", uid));
   return docSnap;
 }

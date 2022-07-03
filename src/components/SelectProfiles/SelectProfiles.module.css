@@ -1,0 +1,55 @@
+.profiles-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3);
+}
+
+.profiles-container header h3{
+  color: var(--main-white);
+}
+
+.profiles-container header p{
+  color: var(--second-white);
+}
+
+.profiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3);
+}
+.profile {
+  display: flex;
+  max-width: 100%;
+  background-color: var(--second-main);
+  overflow: hidden;
+  border-radius: var(--border);
+  box-shadow: var(--soft-shadow);
+}
+
+.profile img {
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+  display: block;
+}
+.profile aside {
+  padding: var(--size2);
+}
+
+.profile aside h3 {
+  color: var(--main-white);
+  font-size: var(--h2);
+}
+
+.profile aside p {
+  color: var(--second-white);
+  font-size: var(--h2);
+}
+
+.checked {
+  outline: 2px solid var(--app-color) ;
+}
+
+.profile-image-container {
+  overflow: hidden;
+}

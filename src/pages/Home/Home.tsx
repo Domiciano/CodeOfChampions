@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { db } from '../../utils/firebase-functions/getFirebaseInit';
-import { isTeacherType } from "../../types/user";
+import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
+import { isTeacherType, isStudentType  } from "../../types/user";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { userAuthInitStateType } from '../../store/userAuth-slice';
+import { userAuthInitStateType, logOutUser } from '../../store/userAuth-slice';
 import { getTeacherClasses } from '../../store/class-slice';
 import TeacherView from '../TeacherView/TeacherView';
-// import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
+import LogOut from '../../components/LogOut/LogOut';
 
 const Home = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -14,10 +14,7 @@ const Home = () => {
   const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const dispatch = useDispatch();
   
-  
-
   useEffect(() => {
     if(!isFetchingCurrentUser){
       console.log('AAA', isLoggedIn);
@@ -29,9 +26,11 @@ const Home = () => {
     }
 
     if(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)){
-      console.log('TEACHEEER', loggedUser.isVerified);
+      console.log('TEACHER', loggedUser.isVerified);
       if(!loggedUser.isVerified){
-        navigate("/teacher-pending");
+        dispatch(logOutUser(auth, () => {
+          navigate("/teacher-pending");
+        }))
       }else{
         dispatch(getTeacherClasses(db, loggedUser.id));
       }
@@ -43,7 +42,8 @@ const Home = () => {
       {(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)) ? 
         <TeacherView teacherUser={loggedUser}/> :
         <>
-          <p>{loggedUser?.name}</p>
+          {loggedUser?.role === 'student' && isStudentType(loggedUser) && <p>{loggedUser?.profile}</p>}
+          <LogOut/>
         </>
       }
     </div>

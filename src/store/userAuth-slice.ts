@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, AnyAction } from "@reduxjs/toolkit";
-import { StudentType, TeacherType } from "../types/user";
+import { StudentType, TeacherType, isStudentType } from "../types/user";
 import { Firestore } from "firebase/firestore";
 import { setUserDataFromObj } from "../utils/firebase-functions/setUserDataFromObj";
 import {
@@ -9,7 +9,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { getCurrentUser } from "../utils/firebase-functions/getCurrentUser";
 
 // * Initial state Type
@@ -70,7 +70,6 @@ export const logUserAsync = (
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // console.log(errorCode, errorMessage, "ERROR LOGIN USER");
         if(errorCallback) errorCallback(errorCode, errorMessage);
       });
   };
@@ -97,7 +96,6 @@ export const setOnAuthState = (auth: Auth, db: Firestore) => {
           .catch((error) => {
             console.log(error.code, error.message, Object.keys(error));
           });
-        // dispatch(userLoginSlice.actions.setFetchingCurrentUserState({ state: false }));
       } else {
         // User is signed out
         dispatch(userLoginSlice.actions.login({ user: null }));
@@ -138,17 +136,18 @@ export const addNewUserToFirestore = (
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user, user.uid);
-        try {
-          setDoc(doc(db, "users", user.uid), { ...userData, id: user.uid });
-          console.log("User has been created successfully");
-        } catch (e) {
-          console.log("PAILAAAAAAAAAA");
-          console.error("Error adding document: ", e);
-        }
-        callback();
+        setDoc(doc(db, "users", user.uid), { ...userData, id: user.uid })
+          .then(() => {
+            if(userData.role === 'student' && isStudentType(userData)){
+              updateDoc(doc(db, "classes", userData.belongedClassId), {
+                studentsId: arrayUnion(user.uid)
+              })
+            }
+            console.log("User has been created successfully");
+            callback();
+          })
       })
       .catch((error) => {
-        console.log("SUERTEEEEEEE");
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage, "ERROR AUTH");
