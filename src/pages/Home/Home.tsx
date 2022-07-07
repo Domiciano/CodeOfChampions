@@ -4,9 +4,9 @@ import { isTeacherType, isStudentType  } from "../../types/user";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { userAuthInitStateType, logOutUser } from '../../store/userAuth-slice';
-import { getTeacherClasses } from '../../store/class-slice';
+import { getTeacherClasses, getStudentClass } from '../../store/class-slice';
 import TeacherView from '../TeacherView/TeacherView';
-import LogOut from '../../components/LogOut/LogOut';
+import StudentView from '../../pages/StudentView/StudentView';
 
 const Home = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -34,17 +34,18 @@ const Home = () => {
       }else{
         dispatch(getTeacherClasses(db, loggedUser.id));
       }
+    }else if(loggedUser?.role === 'student' && isStudentType(loggedUser)){
+      dispatch(getStudentClass(db, loggedUser.belongedClassId));
     }
   }, [dispatch, isFetchingCurrentUser, isLoggedIn, loggedUser, navigate]);
 
   return (
     <div>
-      {(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)) ? 
-        <TeacherView teacherUser={loggedUser}/> :
-        <>
-          {loggedUser?.role === 'student' && isStudentType(loggedUser) && <p>{loggedUser?.profile}</p>}
-          <LogOut/>
-        </>
+      {(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)) && 
+        <TeacherView teacherUser={loggedUser}/>
+      }
+      {(loggedUser?.role === 'student' && isStudentType(loggedUser)) &&
+        <StudentView studentUser={loggedUser}/>
       }
     </div>
   )

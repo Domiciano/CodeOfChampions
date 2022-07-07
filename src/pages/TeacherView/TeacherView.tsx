@@ -39,8 +39,9 @@ const TeacherView: React.FC<TeacherViewInterface> = ({teacherUser}) => {
               key={currentClass.classId}
               isActive={currentClass.isActive}
               term= {currentClass.term} 
-              schedule= {currentClass.schedule} 
+              schedule= {currentClass.schedule}
               studentsQuantity={currentClass.studentsId.length}
+              id={currentClass.classId}
             />
           ))
         }

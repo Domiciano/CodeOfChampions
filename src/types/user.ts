@@ -3,6 +3,7 @@ export type UserType = {
   id: string,
   email: string,
   role: 'teacher' | 'student',
+  universityId: string
 };
 
 export type TeacherType = UserType & {

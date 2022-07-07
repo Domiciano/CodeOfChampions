@@ -18,11 +18,11 @@ const UserThumbNailContent: React.FC<UserThumbNailInterface> = ({ rank, name, st
         <h2>{rank}</h2>
         <div className={styles['user-thumb__info']}>
           <div className={styles['user-thumb__header']}>
-            <h3>Daniel</h3>
-            <p><b>5</b> pt</p>
+            <h3>{name}</h3>
+            <p><b>{points}</b> pt</p>
           </div>
           <div className={styles['user-thumb__footer']}>
-            <p>A00</p>
+            <p>{studentId}</p>
             { isTeacher && <Arrow right black={rank <= 3}/> }
           </div>
         </div>

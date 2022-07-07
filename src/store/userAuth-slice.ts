@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { getCurrentUser } from "../utils/firebase-functions/getCurrentUser";
+import classSlice from './class-slice';
 
 // * Initial state Type
 export type userAuthInitStateType = {
@@ -114,6 +115,7 @@ export const logOutUser = (auth: Auth, callback?: Function) => {
         // Sign-out successful.
         console.log("Congrats, sign out successful");
         dispatch(userLoginSlice.actions.logout());
+        dispatch(classSlice.actions.clearData());
         if (callback) callback();
       })
       .catch((error) => {
@@ -130,6 +132,7 @@ export const addNewUserToFirestore = (
   callback: Function,
   email: string,
   password: string,
+  errorCallback?: (e: any) => void
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -148,9 +151,10 @@ export const addNewUserToFirestore = (
           })
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage, "ERROR AUTH");
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // console.log(errorCode, errorMessage, "ERROR AUTH");
+        if(errorCallback) errorCallback(error);
       });
   };
 };

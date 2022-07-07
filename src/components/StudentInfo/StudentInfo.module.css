@@ -1,0 +1,28 @@
+.student-info {
+  display: flex;
+  gap: var(--size2);
+  align-items: center;
+}
+
+.student-info aside {
+  width: 35px;
+  height: 35px;
+  border-radius: 100px;
+}
+
+.student-info h1 {
+  color: var(--main-white);
+  font-size: var(--h5);
+  line-height: 1.3em;
+}
+
+.student-info p {
+  color: var(--second-white);
+  font-size: var(--h3);
+  line-height: 1.2em;
+}
+
+.student-info div {
+  display: flex;
+  flex-direction: column;
+}

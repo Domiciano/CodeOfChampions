@@ -2,6 +2,9 @@
   display: flex;
   align-items: center;
   gap: var(--size2);
-  color: var(--error);
+  color: var(--error) !important;
   font-weight: 600;
+}
+.error p {
+  color: var(--error) !important;
 }

@@ -2,7 +2,7 @@ import { DocumentData } from "firebase/firestore";
 import { UserType, StudentType, TeacherType } from "../../types/user";
 
 export const setUserDataFromObj = (docData: DocumentData) => {
-  const {name, id, email, role} = docData; 
+  const {name, id, email, role, universityId} = docData; 
   if(docData.role === 'student'){
     const studentData: StudentType = {
       name, 
@@ -11,7 +11,8 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       role, 
       profile: docData.profile,
       points: docData.points,
-      belongedClassId: docData.belongedClassId
+      belongedClassId: docData.belongedClassId,
+      universityId
     }
     return studentData
   }else{
@@ -21,7 +22,8 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       id, 
       role, 
       classesId: docData.classId || [] ,
-      isVerified: docData.isVerified
+      isVerified: docData.isVerified,
+      universityId
     }
     return teacherData
   }

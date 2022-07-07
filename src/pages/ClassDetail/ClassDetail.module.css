@@ -1,0 +1,9 @@
+.class-detail {
+  padding: var(--size3);
+}
+
+.class-detail__students {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2)
+}

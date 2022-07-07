@@ -3,15 +3,16 @@ import { useDispatch } from 'react-redux';
 import { setOnAuthState } from '../../store/userAuth-slice';
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { Navigate, Route, Routes } from "react-router-dom";
+import { getActiveClasses } from '../../store/class-slice';
 // * Pages
 import TestCompo from '../../pages/TestCompo/TestCompo';
 import Login from '../../pages/Login/Login';
 import Home from '../../pages/Home/Home';
 import SignUp from '../../pages/SignUp/SignUp';
 import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
+import ClassDetail from '../../pages/ClassDetail/ClassDetail';
 import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
-import { getActiveClasses } from '../../store/class-slice';
 
 
 const  App = () => {
@@ -58,6 +59,7 @@ const  App = () => {
         <Route path="/login" element={<Login/>} ></Route>
         <Route path="/sign-up" element={<SignUp/>} ></Route>
         <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route>
+        <Route path="/class-detail/:classId" element={<ClassDetail/>}></Route>
         <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
         <Route path="/create-class" element={<CreateClass/>}></Route>
         <Route path="*" element={<Navigate to="/" replace />} />

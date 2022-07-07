@@ -9,11 +9,12 @@ interface ClassThumbNailInterface {
   schedule: string;
   studentsQuantity: number
   isActive: boolean;
+  id: string;
 }
 
-const ClassThumbNail: React.FC<ClassThumbNailInterface> = ({ term, schedule, studentsQuantity, isActive }) => {
+const ClassThumbNail: React.FC<ClassThumbNailInterface> = ({ term, schedule, studentsQuantity, isActive, id }) => {
   return (
-    <Link to="/" className={`${styles['class-thumbnail']} ${!isActive ? styles['class-thumbnail--inactive'] : ''}`}>
+    <Link to={`/class-detail/${id}`} className={`${styles['class-thumbnail']} ${!isActive ? styles['class-thumbnail--inactive'] : ''}`}>
       <div className={styles['class-thumbnail__main-info']}>
         <h3>{term}</h3>
         <p>{schedule}</p>

@@ -1,0 +1,10 @@
+.student-view {
+  padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2)
+}
+
+.student-view button:first-child {
+  align-self: flex-end;
+}

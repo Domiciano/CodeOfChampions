@@ -13,6 +13,10 @@
   padding: var(--size1) var(--size2);
 }
 
+.error {
+  border: 2px solid var(--error);
+}
+
 .select-dropdown__input p {
   color: var(--second-white);
   font-weight: 600;

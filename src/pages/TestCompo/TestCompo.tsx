@@ -88,12 +88,14 @@ const TestCompo = () => {
         term='2022/2' 
         schedule='Thursday, Wednesday, 7am-9am' 
         studentsQuantity={31}
+        id={''}
       />
       <ClassThumbNail 
         isActive={false}
         term='2021/1' 
         schedule='Thursday, Wednesday, 7am-9am' 
         studentsQuantity={21}
+        id={''}
       />
     </div>
   )

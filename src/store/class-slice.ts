@@ -1,6 +1,17 @@
 import { createSlice, Dispatch, AnyAction } from "@reduxjs/toolkit";
 import { getCurrentUser } from '../utils/firebase-functions/getCurrentUser';
-import { updateDoc, doc, Firestore, addDoc, collection, getDocs, where, query } from "firebase/firestore";
+import { 
+  updateDoc,
+  doc,
+  Firestore,
+  addDoc,
+  collection,
+  getDocs,
+  where,
+  query,
+  arrayUnion, 
+  getDoc
+} from "firebase/firestore";
 import { ClassType } from '../types/classes';
 
 
@@ -28,10 +39,13 @@ const classSlice = createSlice({
     fetchClassesToSelect(state, action) {
       state.classesToSelect = action.payload.classes;
     },
+    clearData(state) {
+      state.userClasses = [];
+    }
   },
 });
 
-export const addNewClass = (db: Firestore, currentClass:ClassType,  callback?: Function) => {
+export const addNewClass = (db: Firestore, currentClass:ClassType, callback?: Function) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     addDoc(collection(db, "classes"), currentClass)
       .then((data) => {
@@ -41,6 +55,12 @@ export const addNewClass = (db: Firestore, currentClass:ClassType,  callback?: F
             // ! I do not know wether this is right
             dispatch(getActiveClasses(db));
             if(callback) callback();
+          })
+        updateDoc(doc(db, "users", currentClass.teacherId), {
+          classesId: arrayUnion(data.id)
+        })
+          .then(() => {
+            console.log("congrats")
           })
       })
   };
@@ -56,6 +76,13 @@ export const getTeacherClasses = (db: Firestore, userId: string) => {
       currentClasses.push({ term, schedule, profiles, topics, teacherId, classId, isActive, studentsId: studentsId || []});
     });
     dispatch(classSlice.actions.fetchClasses({classes: currentClasses}))
+  }
+}
+
+export const getStudentClass = (db: Firestore, classId: string) => {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    const docSnap = await getDoc(doc(db, "classes", classId));
+    dispatch(classSlice.actions.fetchClasses({classes: [docSnap.data()]}))
   }
 }
 

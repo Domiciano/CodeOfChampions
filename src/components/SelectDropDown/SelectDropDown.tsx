@@ -6,9 +6,10 @@ interface SelectDropDownInterface {
   children: React.ReactNode;
   placeholder: string;
   ref: React.Ref<unknown> | null;
+  error?: boolean
 }
 
-const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ children, placeholder}, ref) => {
+const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ children, placeholder, error}, ref) => {
   const [isActive, setIsActive] = useState(false);
   const handleToggleOptions = () => {
     setIsActive(prev => !prev);
@@ -24,7 +25,7 @@ const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ ch
   return (
     <div className={styles['select-dropdown']}>
       <div 
-        className={`${styles['select-dropdown__input']} ${isActive ? styles['select-dropdown__input--active'] : ''}`}
+        className={`${styles['select-dropdown__input']} ${isActive ? styles['select-dropdown__input--active'] : ''} ${error ? styles['error'] : ''}`}
         onClick={handleToggleOptions}
       >
         <p>{placeholder}</p>
