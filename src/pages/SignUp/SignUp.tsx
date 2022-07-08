@@ -15,7 +15,7 @@ import MainBtn from '../../components/MainBtn/MainBtn';
 import { addNewUserToFirestore, logOutUser } from '../../store/userAuth-slice';
 import { InitialStateType } from '../../store/class-slice';
 import SelectProfiles from '../../components/SelectProfiles/SelectProfiles';
-import { SelectClassType, ProfileDataType } from '../../types/classes';
+import { ProfileDataSelect, SelectClassType } from '../../types/classes';
 import ErrorMsg from '../../components/ErrorMsg/ErrorMsg';
 
 type InputField = {
@@ -61,7 +61,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const activeClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.classesToSelect);
   const [classSelect, setClassSelect] = useState<SelectClassType | null>(null);
-  const [classProfiles, setClassProfiles] = useState<ProfileDataType[]>([]);
+  const [classProfiles, setClassProfiles] = useState<ProfileDataSelect[]>([]);
   const [firebaseError, setFirebaseError] = useState('');
   const selectDropdownRef = useRef<any>();
   const dispatch = useDispatch();

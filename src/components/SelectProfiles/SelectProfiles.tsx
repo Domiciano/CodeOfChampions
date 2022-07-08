@@ -1,15 +1,15 @@
 import React from 'react';
 import styles from './SelectProfiles.module.css';
-import { ProfileDataType } from '../../types/classes';
+import { ProfileDataSelect } from '../../types/classes';
 
 interface SelectProfilesInterface {
-  profilesData: ProfileDataType[],
+  profilesData: ProfileDataSelect[],
   handleChooseProfile: (index: number) => void
 }
 
 const SelectProfiles: React.FC<SelectProfilesInterface> = ({profilesData, handleChooseProfile}) => {
 
-  const handleProfileSelect = (profile: ProfileDataType, index: number) => {
+  const handleProfileSelect = (profile: ProfileDataSelect, index: number) => {
     handleChooseProfile(index);
   }
 

@@ -12,8 +12,9 @@ import data from '../../data/profiles.json';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import plusIcon from '../../img/svg/plus.svg';
 import cancelIcon from '../../img/svg/cancel.svg';
-import { ProfileDataType, TopicDataType, ClassType } from '../../types/classes';
+import { ProfileDataType, ClassType, ProfileDataSelect, TopicDataSelect } from '../../types/classes';
 import { addNewClass } from '../../store/class-slice';
+
 
 
 const CreateClass = () => {
@@ -22,8 +23,8 @@ const CreateClass = () => {
   const [term, setTerm] = useState('');
   const [schedule, setSchedule] = useState('');
   const navigate = useNavigate();
-  const [profiles, setProfiles] = useState<ProfileDataType[]>(data.profiles.map(profile => ({...profile, isChecked: false})));
-  const [topics, setTopics] = useState<TopicDataType[]>(data.topics.map(profile => ({...profile, isChecked: false, activities: []})));
+  const [profiles, setProfiles] = useState<ProfileDataSelect[]>(data.profiles.map(profile => ({...profile, isChecked: false})));
+  const [topics, setTopics] = useState<TopicDataSelect[]>(data.topics.map(profile => ({...profile, isChecked: false, activities: []})));
   const selectDropdownRef = useRef<any>();
   const dispatch = useDispatch();
 
@@ -34,10 +35,9 @@ const CreateClass = () => {
       prevCopy[currentIndex].isChecked = !prevCopy[currentIndex].isChecked;
       return prevCopy;
     })
-    // selectDropdownRef.current.close();
   };
 
-  const handleToggleTopic = (currentTopic: TopicDataType) => {
+  const handleToggleTopic = (currentTopic: TopicDataSelect) => {
     setTopics(prev => {
       const currentIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -47,12 +47,12 @@ const CreateClass = () => {
     // selectDropdownRef.current.close();
   };
 
-  const setTopicsPlaceHolder = (data: TopicDataType[]) => {
+  const setTopicsPlaceHolder = (data: TopicDataSelect[]) => {
     const text = data.filter(p => p.isChecked).map(p => p.name).join(', ');
     return text.length < 40 ? text : `${text.substring(0,40)}...`;
   }
 
-  const addNewActivity = (currentTopic: TopicDataType) => {
+  const addNewActivity = (currentTopic: TopicDataSelect) => {
     setTopics(prev => {
       const index = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -61,7 +61,7 @@ const CreateClass = () => {
     })
   }
 
-  const handleDeleteActivity = (currentTopic: TopicDataType, activityIndex: number) => {
+  const handleDeleteActivity = (currentTopic: TopicDataSelect, activityIndex: number) => {
     setTopics(prev => {
       const index = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -70,7 +70,7 @@ const CreateClass = () => {
     })
   }
 
-  const handleToggleActivityMode = (currentTopic: TopicDataType, activityIndex: number) => {
+  const handleToggleActivityMode = (currentTopic: TopicDataSelect, activityIndex: number) => {
     setTopics(prev => {
       const index = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -78,14 +78,26 @@ const CreateClass = () => {
       return prevCopy;
     })
   }
-
+  // TODO: Add the class to firestore
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const classCreated: ClassType = {
       term: term,
       schedule: schedule,
-      profiles: profiles.filter(p => p.isChecked),
-      topics: topics.filter(t => t.isChecked),
+      profiles: profiles.filter(p => p.isChecked).map(p => (
+        {
+          description: p.description, 
+          hasActivities: p.hasActivities, 
+          img: p.img, 
+          name: p.name
+        }
+      )),
+      topics: topics.filter(t => t.isChecked).map(t => (
+        {
+          activities: t.activities,
+          name: t.name
+        }
+      )),
       teacherId: loggedUser?.id || 'NO ID',
       classId: '',
       isActive: true,
@@ -116,7 +128,6 @@ const CreateClass = () => {
       <form onSubmit={handleSubmit} className={styles['create-class__form']}>
         <TextInput
           onChangeInputValue={(value: string) => {
-            // const numberPattern = /\d+/g;
             setTerm(value);
           }}
           placeholder="Year/Half  e.i: 2021/1"

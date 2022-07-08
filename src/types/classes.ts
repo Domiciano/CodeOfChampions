@@ -11,14 +11,13 @@ export type ClassType = {
 }
 
 export type ProfileDataType = {
-  isChecked: boolean;
   name: string;
   description: string;
   img: string;
+  hasActivities: boolean;
 }
 
 export type TopicDataType = {
-  isChecked: boolean;
   name: string;
   activities: ActivityType[]
 }
@@ -29,4 +28,12 @@ export type ActivityType = {
 
 export type SelectClassType = ClassType & {
   teacher: string
+}
+
+export type ProfileDataSelect = ProfileDataType & {
+  isChecked: boolean;
+}
+
+export type TopicDataSelect = TopicDataType & {
+  isChecked: boolean;
 }

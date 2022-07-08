@@ -1,5 +1,5 @@
 import { Firestore, query, collection, where, getDocs, } from "firebase/firestore";
-import { UserType, StudentType } from '../../types/user';
+import { StudentType } from '../../types/user';
 
 export const getStudentsFromClass = async (db: Firestore, classId: string) => {
   const teacherClasses = query(collection(db, "users"), where("belongedClassId", "==", classId));
