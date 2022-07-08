@@ -23,7 +23,11 @@ export type TopicDataType = {
 }
 
 export type ActivityType = {
-  rushMode: boolean;
+  profile: string;
+  profileActivities: {
+    rushMode: boolean;
+    difficulty: 'easy' | 'medium' | 'hard'
+  }[]
 }
 
 export type SelectClassType = ClassType & {

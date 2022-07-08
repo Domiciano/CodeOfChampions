@@ -12,7 +12,7 @@ import data from '../../data/profiles.json';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import plusIcon from '../../img/svg/plus.svg';
 import cancelIcon from '../../img/svg/cancel.svg';
-import { ProfileDataType, ClassType, ProfileDataSelect, TopicDataSelect } from '../../types/classes';
+import { ProfileDataType, ClassType, ProfileDataSelect, TopicDataSelect, ActivityType } from '../../types/classes';
 import { addNewClass } from '../../store/class-slice';
 
 
@@ -42,6 +42,13 @@ const CreateClass = () => {
       const currentIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
       prevCopy[currentIndex].isChecked = !prevCopy[currentIndex].isChecked;
+      profiles.forEach(p => {
+        if (!p.hasActivities) return
+        prevCopy[currentIndex].activities.push({
+          profile: p.name,
+          profileActivities: []
+        })
+      })
       return prevCopy;
     })
     // selectDropdownRef.current.close();
@@ -52,29 +59,34 @@ const CreateClass = () => {
     return text.length < 40 ? text : `${text.substring(0,40)}...`;
   }
 
-  const addNewActivity = (currentTopic: TopicDataSelect) => {
+  const addNewActivity = (currentTopic: TopicDataSelect, currentActivity: ActivityType) => {
     setTopics(prev => {
-      const index = prev.findIndex(p => p.name === currentTopic.name);
+      const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
-      prevCopy[index].activities.push({rushMode: false})
+      const activityIndex = prevCopy[topicIndex].activities.findIndex(p => p.profile === currentActivity.profile);
+      const currentProfileActivity = prevCopy[topicIndex].activities[activityIndex];
+      currentProfileActivity.profileActivities.push({
+        rushMode: false,
+        difficulty: 'easy'
+      })
       return prevCopy;
     })
   }
 
-  const handleDeleteActivity = (currentTopic: TopicDataSelect, activityIndex: number) => {
+  const handleDeleteActivity = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number) => {
     setTopics(prev => {
-      const index = prev.findIndex(p => p.name === currentTopic.name);
+      const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
-      prevCopy[index].activities.splice(activityIndex, 1);
+      prevCopy[topicIndex].activities[activityIndex].profileActivities.splice(profileActivityIndex, 1);
       return prevCopy;
     })
   }
 
-  const handleToggleActivityMode = (currentTopic: TopicDataSelect, activityIndex: number) => {
+  const handleToggleActivityMode = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number) => {
     setTopics(prev => {
-      const index = prev.findIndex(p => p.name === currentTopic.name);
+      const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
-      prevCopy[index].activities[activityIndex].rushMode = !prevCopy[index].activities[activityIndex].rushMode;
+      prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].rushMode = !prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].rushMode;
       return prevCopy;
     })
   }
@@ -182,31 +194,43 @@ const CreateClass = () => {
               <div key={topic.name} className={styles['create-class__topics__topic']}>
                 <h3>{topic.name}</h3>
                 <div className={styles['create-class__topics__topic__action']}>
-                  <p>Activities</p>
-                  <button type="button" onClick={addNewActivity.bind(null, topic)}>
-                    <img src={plusIcon} alt="plus" />
-                  </button>
-                </div>
-                <div className={styles['create-class__topics__topic__activities']}>
                   {
-                    topic.activities.map((activity, index) => (
-                      <div key={Math.random().toFixed(5)} className={styles['create-class__topics__topic__activity-container']}>
-                        <div className={styles['create-class__topics__topic__activity']}>
-                          <p>{index + 1}. Activity</p>
-                          <div 
-                            className={styles['activity-mode']}
-                            onClick={handleToggleActivityMode.bind(null, topic, index)}
-                          >
-                            <p>Rush Mode</p>
-                            <CheckBox isActive={activity.rushMode}/>
-                          </div>
+                    topic.activities.map((currentActivity, currentActivityIndex ) => (
+                      <article 
+                        key={currentActivity.profile}
+                        className={styles['activities-container']}
+                      >
+                        <header>
+                          <h4>{currentActivity.profile} <b style={{color: 'var(--second-white)'}}>activities</b></h4>
+                          <button type="button" onClick={addNewActivity.bind(null, topic, currentActivity)}>
+                            <img src={plusIcon} alt="plus" />
+                          </button>
+                        </header>
+                        <div className={styles['create-class__topics__topic__activities']}>
+                          {
+                            currentActivity.profileActivities.map((activity, index) => (
+                              <div key={Math.random().toFixed(5)} className={styles['create-class__topics__topic__activity-container']}>
+                                <div className={styles['create-class__topics__topic__activity']}>
+                                  <p>{index + 1}. Activity</p>
+                                  <div 
+                                    className={styles['activity-mode']}
+                                    onClick={handleToggleActivityMode.bind(null, topic, currentActivityIndex, index)}
+                                  >
+                                    <p>Rush Mode</p>
+                                    <CheckBox isActive={activity.rushMode}/>
+                                  </div>
+                                </div>
+                                <button type="button" onClick={handleDeleteActivity.bind(null, topic, currentActivityIndex, index)}>
+                                  <img src={cancelIcon} alt="delete" />
+                                </button>
+                              </div>
+                            ))
+                          }
                         </div>
-                        <button type="button" onClick={handleDeleteActivity.bind(null, topic, index)}>
-                          <img src={cancelIcon} alt="delete" />
-                        </button>
-                      </div>
+                      </article>
                     ))
                   }
+                  {/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
                 </div>
               </div>
             ))
