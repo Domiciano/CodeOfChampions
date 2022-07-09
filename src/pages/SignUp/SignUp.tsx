@@ -130,7 +130,8 @@ const SignUp = () => {
         role: 'teacher',
         classesId: [],
         isVerified: false,
-        universityId: id.content
+        universityId: id.content,
+        messages: []
       }
     }else{
       userToPublish = {
@@ -138,10 +139,13 @@ const SignUp = () => {
         email: email.content,
         id: '',
         role: 'student',
-        profile: classProfiles.find(p => p.isChecked)?.name || "apprentice",
+        profile: {
+          name: classProfiles.find(p => p.isChecked)?.name || "apprentice"
+        },
         points: 0,
         belongedClassId: classSelect?.classId || '',
-        universityId: id.content
+        universityId: id.content,
+        messages: []
       }
     }
 

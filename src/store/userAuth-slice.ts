@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, AnyAction } from "@reduxjs/toolkit";
-import { StudentType, TeacherType, isStudentType } from "../types/user";
+import { StudentType, TeacherType, isStudentType, userMessage } from "../types/user";
 import { Firestore } from "firebase/firestore";
 import { setUserDataFromObj } from "../utils/firebase-functions/setUserDataFromObj";
 import {
@@ -9,7 +9,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { setDoc, doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { getCurrentUser } from "../utils/firebase-functions/getCurrentUser";
 import classSlice from './class-slice';
 
@@ -151,11 +151,22 @@ export const addNewUserToFirestore = (
           })
       })
       .catch((error) => {
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // console.log(errorCode, errorMessage, "ERROR AUTH");
         if(errorCallback) errorCallback(error);
       });
+  };
+};
+
+export const deleteUserMessage = (db: Firestore, userID: string, message:userMessage,  callback?: Function) => {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    updateDoc(doc(db, "users", userID), {
+      messages: arrayRemove(message)
+    })
+      .then(() => {
+        if(callback) callback();
+      })
+      .catch((error) => {
+        console.log('XD', error)
+      })
   };
 };
 

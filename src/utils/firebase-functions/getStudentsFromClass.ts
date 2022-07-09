@@ -6,8 +6,8 @@ export const getStudentsFromClass = async (db: Firestore, classId: string) => {
     const querySnapshot = await getDocs(teacherClasses);
     const users: StudentType[] = []
     querySnapshot.forEach((doc) => {
-      const { name, id, email, role, universityId, profile, points, belongedClassId } = doc.data();
-      const currentUser: StudentType = { name, id, email, role, universityId, profile, points, belongedClassId };
+      const { name, id, email, role, universityId, profile, points, belongedClassId, messages } = doc.data();
+      const currentUser: StudentType = { name, id, email, role, universityId, profile, points, belongedClassId, messages };
       users.push(currentUser);
     });
     return users

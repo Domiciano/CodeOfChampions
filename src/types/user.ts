@@ -3,7 +3,14 @@ export type UserType = {
   id: string,
   email: string,
   role: 'teacher' | 'student',
-  universityId: string
+  universityId: string,
+  messages: userMessage[];
+};
+
+export type userMessage = {
+  code: string,
+  content: string,
+  id: string,
 };
 
 export type TeacherType = UserType & {
@@ -12,7 +19,9 @@ export type TeacherType = UserType & {
 }
 
 export type StudentType = UserType & {
-  profile: string,
+  profile: {
+    name: string,
+  },
   points: number,
   belongedClassId: string,
 }

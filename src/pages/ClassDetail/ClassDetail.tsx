@@ -20,7 +20,7 @@ const ClassDetail = () => {
 
   const filterStudentsByProfile = useCallback((profile: string) => {
     setFilteredUsers(classUsers.filter(u => {
-      return u.profile === profile
+      return u.profile.name === profile
     }))
     setSelectedProfileFilter(profile);
   }, [classUsers])

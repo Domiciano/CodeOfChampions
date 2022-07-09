@@ -42,8 +42,9 @@ const CreateClass = () => {
       const currentIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
       prevCopy[currentIndex].isChecked = !prevCopy[currentIndex].isChecked;
+      // TODO: Change this to state way, currently not handling nicely
       profiles.forEach(p => {
-        if (!p.hasActivities) return
+        if (!p.hasActivities || !p.isChecked || prevCopy[currentIndex].activities.some(profile => profile.profile === p.name)) return
         prevCopy[currentIndex].activities.push({
           profile: p.name,
           profileActivities: []
@@ -230,7 +231,6 @@ const CreateClass = () => {
                       </article>
                     ))
                   }
-                  {/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
                 </div>
               </div>
             ))
