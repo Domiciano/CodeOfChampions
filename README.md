@@ -10,20 +10,29 @@
 * **Class**
     * IsActive: Boolean
     * Profiles: Profile[]
-    * Name: String
-    * Teacher: String
+    * TeacherId: String
         * The teacher’s ID
-    * Students: String[]
+    * StudentsId: String[]
         * A array made of student’s ID
     * Topics: Topic[]
+    * ClassId: string
+    * Term: string
+    * Schedule: string
 * **Topic**
     * Name: String
-    * ActivityPerRole:
-        * Role1: number
-        * Role2: number
-        * …n
+    * Activities: {
+        * profile: String
+        * profileActivities: {
+          * difficulty: "Easy" | "Hard" | "Medium",
+          * podiumFirst: String
+          * podiumSecond: String
+          * podiumThird: String
+          * activityId: String
+        }
+    }[]
 * **Profile**
     * Name: String
+    * hasActivities: boolean
     * Description: String
     * images: Object
         * MainIcon: String
