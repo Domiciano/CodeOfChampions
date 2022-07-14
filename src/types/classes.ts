@@ -1,3 +1,8 @@
+export type ActivityState = "complete" | "almost" | "none";
+
+export type ActivityPodium = "first" | "second" | "third" | "none";
+
+export type Difficulty =  'easy' | 'medium' | 'hard'
 
 export type ClassType = {
   term: string,
@@ -25,8 +30,11 @@ export type TopicDataType = {
 export type ActivityType = {
   profile: string;
   profileActivities: {
-    rushMode: boolean;
-    difficulty: 'easy' | 'medium' | 'hard'
+    difficulty: Difficulty,
+    podiumFirst?: string,
+    podiumSecond?: string,
+    podiumThird?: string,
+    activityId: string
   }[]
 }
 

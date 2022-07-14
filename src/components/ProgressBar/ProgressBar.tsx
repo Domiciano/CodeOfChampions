@@ -1,21 +1,31 @@
 import React from 'react';
+import { StudentType } from "../../types/user";
 import styles from './ProgressBar.module.css';
 import { Link } from "react-router-dom";
 import Arrow from '../UI/Arrow/Arrow';
 
-const ProgressBar = () => {
+interface ProgressBarInterface {
+  student: StudentType
+}
+
+const ProgressBar: React.FC<ProgressBarInterface> = ({ student }) => {
   return (
     <Link to="/" className={styles['progress-bar']}>
       <div className={styles['header']}>
         <h3>Progress</h3>
-        <p><b>6 </b>pt</p>
       </div>
       <div className={styles['bar-wrapper']}>
-        <div className={styles['stage']}></div>
-        <div className={styles['stage']}></div>
-        <div className={styles['stage']}></div>
-        <div className={styles['stage']}></div>
-        <div className={styles['stage']}></div>
+        {
+          student.classState.topics.map(topic => (
+            <div key={topic.name} className={styles['stage']}>
+              {
+                topic.topicActivities.map(ta => (
+                  <div key={ta.id} className={styles['activity']}></div>
+                ))
+              }
+            </div>
+          ))
+        }
       </div>
         <div className={styles['footer']}>
           <p>Detail</p>

@@ -27,7 +27,6 @@ const TestCompo = () => {
     <div className={styles.login}>
       <LogOut/>
       <MainBtn text="Login" action={() => {setModalActive(true)}}/>
-      <ProgressBar/>
       <div>
         <Arrow/>
         <UserIcon style={styles['user']}/>

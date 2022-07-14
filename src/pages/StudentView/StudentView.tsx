@@ -43,7 +43,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
         profile={studentUser.profile.name}
         studentId={studentUser.universityId}
       />
-      <ProgressBar/>
+      <ProgressBar student={studentUser}/>
     </div>
   )
 }

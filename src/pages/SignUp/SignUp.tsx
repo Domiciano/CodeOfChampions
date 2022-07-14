@@ -17,43 +17,8 @@ import { InitialStateType } from '../../store/class-slice';
 import SelectProfiles from '../../components/SelectProfiles/SelectProfiles';
 import { ProfileDataSelect, SelectClassType } from '../../types/classes';
 import ErrorMsg from '../../components/ErrorMsg/ErrorMsg';
+import { initState } from './signUp-utils';
 
-type InputField = {
-  content: string,
-  error: boolean
-}
-
-type InitStateType = {
-  name: InputField,
-  email: InputField,
-  id: InputField,
-  password: InputField,
-  confirmPassword: InputField,
-
-}
-
-const initState: InitStateType = {
-  name: {
-    content: '',
-    error: false
-  },
-  email: {
-    content: '',
-    error: false
-  },
-  id: {
-    content: '',
-    error: false
-  },
-  password: {
-    content: '',
-    error: false
-  },
-  confirmPassword: {
-    content: '',
-    error: false
-  }
-}
 
 const SignUp = () => {
   const location = useLocation();
@@ -140,12 +105,37 @@ const SignUp = () => {
         id: '',
         role: 'student',
         profile: {
-          name: classProfiles.find(p => p.isChecked)?.name || "apprentice"
+          name: classProfiles.find(p => p.isChecked)?.name || "Apprentice"
         },
         points: 0,
         belongedClassId: classSelect?.classId || '',
         universityId: id.content,
-        messages: []
+        messages: [],
+        classState: {
+          points: 0,
+          topics: classSelect?.topics.map(topic => {
+            if (classProfiles.find(p => p.isChecked)?.name === 'killer') {
+              return {
+                name: topic.name,
+                topicPoints: 0,
+                topicActivities: topic.activities.find(t => t.profile === 'killer')?.profileActivities.map(pa => ({
+                  id: pa.activityId,
+                  state: 'none',
+                  activityPodium: 'none'
+                })) || []
+              }
+            }else {
+              return {
+                name: topic.name,
+                topicPoints: 0,
+                topicActivities: topic.activities.find(t => t.profile === 'Killer')?.profileActivities.map(pa => ({
+                  id: pa.activityId,
+                  state: 'none',
+                })) || []
+              }
+            }
+          }) || []
+        }
       }
     }
 
@@ -183,23 +173,16 @@ const SignUp = () => {
                 placeholder={classSelect ? `${classSelect.teacher} - ${classSelect.term}` : "Select a Class"}
               >
                 <div className={styles['sign-up__classes']}>
-                  {activeClasses.map( classData => <SelectClassThumbnail 
-                    teacher={classData.teacherName}
-                    term={classData.term}
-                    schedule={classData.schedule}
-                    key={classData.classId} 
-                    onClick={handleClassThumbClick.bind(null, {
-                      term: classData.term,
-                      schedule: classData.schedule,
-                      profiles: classData.profiles,
-                      topics: classData.topics,
-                      teacherId: classData.teacherId,
-                      classId: classData.classId,
-                      isActive: classData.isActive,
-                      studentsId: classData.studentsId,
-                      teacher: classData.teacherName,
-                    })}
-                  />)}
+                  {activeClasses.map( classData => {
+                    const {term, schedule, classId, teacher} = classData;
+                    return <SelectClassThumbnail 
+                    teacher={teacher}
+                    term={term}
+                    schedule={schedule}
+                    key={classId} 
+                    onClick={handleClassThumbClick.bind(null, classData)}
+                  />
+                  })}
                 </div>
               </SelectDropDown>
             </div>

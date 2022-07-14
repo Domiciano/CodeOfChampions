@@ -1,3 +1,5 @@
+import { ActivityState, ActivityPodium } from './classes';
+
 export type UserType = {
   name: string, 
   id: string,
@@ -24,6 +26,29 @@ export type StudentType = UserType & {
   },
   points: number,
   belongedClassId: string,
+  classState: {
+    points: number,
+    topics: {
+      name: string,
+      topicPoints: number,
+      topicActivities: {
+        id: string,
+        state: ActivityState,
+        activityPodium?: ActivityPodium
+      }[]
+    }[]
+  }
+}
+
+export type ClassStateTopic = {
+  topicPoints: number,
+  topicActivities: TopicActivities[]
+}
+
+export type TopicActivities = {
+  id: string,
+  state: ActivityState,
+  activityPodium: ActivityPodium
 }
 
 export function isTeacherType(obj: any): obj is TeacherType {

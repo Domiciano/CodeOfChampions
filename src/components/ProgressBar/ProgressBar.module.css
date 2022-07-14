@@ -39,6 +39,8 @@
   flex-grow: 1;
   height: var(--size2);;
   background-color: var(--second-white);
+  display: flex;
+  overflow: hidden;
 }
 
 .footer {
@@ -50,3 +52,11 @@
   font-size: var(--h1)
 }
 
+.activity {
+  flex-grow: 1;
+  border-right: 3px solid var(--main-black);
+}
+
+.activity:last-child {
+  border-right: none;
+}

@@ -12,16 +12,14 @@ import {
   arrayUnion, 
   getDoc
 } from "firebase/firestore";
-import { ClassType } from '../types/classes';
+import { ClassType, SelectClassType } from '../types/classes';
 
 
-type ClassToSelect = ClassType & {
-  teacherName: string
-}
+
 
 export type InitialStateType = {
   userClasses: ClassType[],
-  classesToSelect: ClassToSelect[]
+  classesToSelect: SelectClassType[]
 };
 
 const initialState: InitialStateType = {

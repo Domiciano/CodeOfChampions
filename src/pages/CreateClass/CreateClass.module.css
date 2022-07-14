@@ -95,11 +95,19 @@
 
 .create-class__topics__topic__activity {
   background: var(--second-main);
-  border-radius: 4px;
-  padding: var(--size1) var(--size3);
+  border-radius: var(--border);
+  padding: var(--size2) var(--size3);
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+.create-class__topics__topic__activity p {
+  flex-grow: 1;
+}
+
+.create-class__topics__topic__activity div {
+  flex-grow: 1;
 }
 
 .create-class__topics__topic__activity-container {
@@ -135,4 +143,17 @@
 .activities-container header {
   display: flex;
   justify-content: space-between;
+}
+
+.create-class__topics__topic__activity__difficulty {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-class__topics__topic__activity__difficulty p {
+  padding: var(--size1) var(--size2);
+  border-bottom: 2px solid var(--second-black);
+}
+.create-class__topics__topic__activity__difficulty p:last-child {
+  border-bottom: none;
 }

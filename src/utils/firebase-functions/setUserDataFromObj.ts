@@ -13,7 +13,8 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       points: docData.points,
       belongedClassId: docData.belongedClassId,
       universityId,
-      messages
+      messages,
+      classState: docData.classState
     }
     return studentData
   }else{

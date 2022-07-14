@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import uniqid from 'uniqid';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import styles from './CreateClass.module.css';
 import Back from '../../components/Back/Back';
@@ -12,10 +13,21 @@ import data from '../../data/profiles.json';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import plusIcon from '../../img/svg/plus.svg';
 import cancelIcon from '../../img/svg/cancel.svg';
-import { ProfileDataType, ClassType, ProfileDataSelect, TopicDataSelect, ActivityType } from '../../types/classes';
+import { 
+  ProfileDataType, 
+  ClassType, 
+  ProfileDataSelect, 
+  TopicDataSelect, 
+  ActivityType, 
+  Difficulty 
+} from '../../types/classes';
 import { addNewClass } from '../../store/class-slice';
 
-
+const DIFFICULTIES: Difficulty[]  = [
+  'easy',
+  'medium',
+  'hard'
+];
 
 const CreateClass = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -25,7 +37,9 @@ const CreateClass = () => {
   const navigate = useNavigate();
   const [profiles, setProfiles] = useState<ProfileDataSelect[]>(data.profiles.map(profile => ({...profile, isChecked: false})));
   const [topics, setTopics] = useState<TopicDataSelect[]>(data.topics.map(profile => ({...profile, isChecked: false, activities: []})));
-  const selectDropdownRef = useRef<any>();
+  const profilesSelectDropdownRef = useRef<any>();
+  const topicsSelectDropdownRef = useRef<any>();
+  const levelDifficultySelectDropdownRef = useRef<any>();
   const dispatch = useDispatch();
 
   const handleToggleProfile = (currentProfile: ProfileDataType) => {
@@ -52,7 +66,6 @@ const CreateClass = () => {
       })
       return prevCopy;
     })
-    // selectDropdownRef.current.close();
   };
 
   const setTopicsPlaceHolder = (data: TopicDataSelect[]) => {
@@ -67,8 +80,11 @@ const CreateClass = () => {
       const activityIndex = prevCopy[topicIndex].activities.findIndex(p => p.profile === currentActivity.profile);
       const currentProfileActivity = prevCopy[topicIndex].activities[activityIndex];
       currentProfileActivity.profileActivities.push({
-        rushMode: false,
-        difficulty: 'easy'
+        difficulty: 'easy',
+        podiumFirst: '',
+        podiumSecond: '',
+        podiumThird: '',
+        activityId: uniqid(),
       })
       return prevCopy;
     })
@@ -83,14 +99,15 @@ const CreateClass = () => {
     })
   }
 
-  const handleToggleActivityMode = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number) => {
+  const handleSetDifficulty = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number, difficulty: Difficulty) => {
     setTopics(prev => {
       const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
-      prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].rushMode = !prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].rushMode;
+      prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].difficulty = difficulty;
       return prevCopy;
     })
   }
+
   // TODO: Add the class to firestore
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -157,7 +174,7 @@ const CreateClass = () => {
         />
         <div className={styles['create-class__classes__select']}>
           <p className={styles['create-class__classes__select__label']}>Profiles</p>
-          <SelectDropDown ref={selectDropdownRef} placeholder={profiles.filter(p => p.isChecked).map(p => p.name).join(', ') || 'Select the profiles'}>
+          <SelectDropDown ref={profilesSelectDropdownRef} placeholder={profiles.filter(p => p.isChecked).map(p => p.name).join(', ') || 'Select the profiles'}>
             <div>
               {profiles.map( profileData => (
                 <article 
@@ -174,7 +191,7 @@ const CreateClass = () => {
         </div>
         <div className={styles['create-class__classes__select']}>
           <p className={styles['create-class__classes__select__label']}>Topics</p>
-          <SelectDropDown ref={selectDropdownRef} placeholder={setTopicsPlaceHolder(topics) || 'Select the topics'}>
+          <SelectDropDown ref={topicsSelectDropdownRef} placeholder={setTopicsPlaceHolder(topics) || 'Select the topics'}>
             <div>
               {topics.map( topicsData => (
                 <article 
@@ -191,7 +208,7 @@ const CreateClass = () => {
         </div>
         <div className={styles['create-class__topics']}>
           {
-            topics.filter(p => p.isChecked).map(topic => (
+            topics.filter(p => p.isChecked).map((topic, topicIndex) => (
               <div key={topic.name} className={styles['create-class__topics__topic']}>
                 <h3>{topic.name}</h3>
                 <div className={styles['create-class__topics__topic__action']}>
@@ -213,13 +230,11 @@ const CreateClass = () => {
                               <div key={Math.random().toFixed(5)} className={styles['create-class__topics__topic__activity-container']}>
                                 <div className={styles['create-class__topics__topic__activity']}>
                                   <p>{index + 1}. Activity</p>
-                                  <div 
-                                    className={styles['activity-mode']}
-                                    onClick={handleToggleActivityMode.bind(null, topic, currentActivityIndex, index)}
-                                  >
-                                    <p>Rush Mode</p>
-                                    <CheckBox isActive={activity.rushMode}/>
-                                  </div>
+                                  <SelectDropDown ref={levelDifficultySelectDropdownRef} placeholder={topics[topicIndex].activities[currentActivityIndex].profileActivities[index].difficulty}>
+                                    <div className={styles['create-class__topics__topic__activity__difficulty']}>
+                                      {DIFFICULTIES.map(d => <p key={d} onClick={handleSetDifficulty.bind(null, topic, currentActivityIndex, index, d)}>{d}</p>)}
+                                    </div>
+                                  </SelectDropDown>
                                 </div>
                                 <button type="button" onClick={handleDeleteActivity.bind(null, topic, currentActivityIndex, index)}>
                                   <img src={cancelIcon} alt="delete" />
