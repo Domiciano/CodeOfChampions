@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
+import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import LogOut from '../../components/LogOut/LogOut';
 import { StudentType } from "../../types/user";
 import StudentInfo from '../../components/StudentInfo/StudentInfo';
@@ -20,7 +20,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses)[0];
   const [activeMessages, setActiveMessages] = useState(studentUser.messages.length > 0);
   const dispatch = useDispatch();
-  console.log(studentUser);
+  console.log(userClasses);
   
   const handleCloseMessageModal = () => {
     dispatch(deleteUserMessage(db, studentUser.id, studentUser.messages[0], () => {

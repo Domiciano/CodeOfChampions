@@ -35,5 +35,19 @@
     {
       "name": "Functions"
     }
+  ],
+  "activityStateOPtions": [
+    {
+      "name": "none",
+      "value": 0
+    },
+    {
+      "name": "almost",
+      "value": 2
+    },
+    {
+      "name": "complete",
+      "value": 5
+    }
   ]
 }

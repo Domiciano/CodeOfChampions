@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { userAuthInitStateType } from '../../store/userAuth-slice';
-import { UserType, StudentType, TeacherType } from "../../types/user";
+import { StudentType, TeacherType } from "../../types/user";
 import { getCurrentUser } from '../../utils/firebase-functions/getCurrentUser';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import { setUserDataFromObj } from '../../utils/firebase-functions/setUserDataFromObj';

@@ -13,7 +13,6 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import LogOut from '../../components/LogOut/LogOut';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
 
 const TestCompo = () => {
   const [modalActive, setModalActive] = useState(false);

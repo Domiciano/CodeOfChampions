@@ -12,6 +12,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { userAuthInitStateType } from '../../store/userAuth-slice';
 import Modal from '../../components/Modal/Modal';
 import Arrow from '../../components/UI/Arrow/Arrow';
+import sistemasLogo from '../../img/sistemas.png';
+import appLogo from '../../img/svg/logo.svg';
 
 
 const Login = () => {
@@ -56,6 +58,7 @@ const Login = () => {
           </Link>
         </div>
       </Modal>}
+      <img className={styles['logo']} src={appLogo} alt="logo" />
       <form onSubmit={handleSubmit}>
         <div className={styles['inputs']}>
           <TextInput
@@ -86,6 +89,10 @@ const Login = () => {
           <p>Don't have an account? <b onClick={() => {setModalActive(true)}}>Create</b></p>
         </div>
       </form>
+      <div className={styles['credits']}>
+        <p>Powered by:</p>
+        <img src={sistemasLogo} alt="logo" />
+      </div>
     </div>
   );
 };

@@ -174,7 +174,10 @@ const CreateClass = () => {
         />
         <div className={styles['create-class__classes__select']}>
           <p className={styles['create-class__classes__select__label']}>Profiles</p>
-          <SelectDropDown ref={profilesSelectDropdownRef} placeholder={profiles.filter(p => p.isChecked).map(p => p.name).join(', ') || 'Select the profiles'}>
+          <SelectDropDown 
+            ref={profilesSelectDropdownRef} 
+            placeholder={profiles.filter(p => p.isChecked).map(p => p.name).join(', ') || 'Select the profiles'}
+          >
             <div>
               {profiles.map( profileData => (
                 <article 
@@ -191,7 +194,11 @@ const CreateClass = () => {
         </div>
         <div className={styles['create-class__classes__select']}>
           <p className={styles['create-class__classes__select__label']}>Topics</p>
-          <SelectDropDown ref={topicsSelectDropdownRef} placeholder={setTopicsPlaceHolder(topics) || 'Select the topics'}>
+          <SelectDropDown 
+            ref={topicsSelectDropdownRef} 
+            placeholder={setTopicsPlaceHolder(topics) || 'Select the topics'}
+            allowActive={profiles.some(p => p.isChecked)}
+          >
             <div>
               {topics.map( topicsData => (
                 <article 

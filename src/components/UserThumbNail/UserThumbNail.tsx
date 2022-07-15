@@ -48,7 +48,7 @@ const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId
   return (
     <>
       { isTeacher ? 
-        <Link className={styleVar} to={`/users/${id}`}>
+        <Link className={styleVar} to={`/evaluate-student/${id}`}>
           <UserThumbNailContent 
             rank={rank} 
             name={name} 

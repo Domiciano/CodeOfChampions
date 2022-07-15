@@ -102,12 +102,10 @@
   justify-content: space-between;
   align-items: center;
 }
-.create-class__topics__topic__activity p {
-  flex-grow: 1;
-}
 
-.create-class__topics__topic__activity div {
+.create-class__topics__topic__activity div, p {
   flex-grow: 1;
+  width: 100%;
 }
 
 .create-class__topics__topic__activity-container {

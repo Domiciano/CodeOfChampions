@@ -1,0 +1,63 @@
+.evaluate-student {
+  padding: var(--size3);
+}
+
+.topics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size4);
+}
+
+.topic {
+  border-left: 3px solid var(--app-color);
+  padding-left: var(--size2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3)
+}
+
+.topic h3 {
+  color: var(--app-color);
+}
+
+.activity-tag {
+  color: var(--main-white);
+  font-weight: 500
+}
+
+.activity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity div, p {
+  flex-grow: 1;
+}
+.activity div, p {
+  width: 100%;
+}
+
+.form button{
+  margin: var(--size5) 0;
+}
+
+.state-options {
+  padding: var(--size1) var(--size2);
+  color: var(--second-white);
+  border-bottom: 2px solid var(--second-black);
+}
+.state-options:last-child {
+  border-bottom: none;
+}
+
+.form__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form__header h3 {
+  color: var(--second-white);
+  font-size: var(--h3);  
+}

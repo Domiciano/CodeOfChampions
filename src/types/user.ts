@@ -56,5 +56,5 @@ export function isTeacherType(obj: any): obj is TeacherType {
 }
 
 export function isStudentType(obj: any): obj is StudentType {
-  return obj.belongedClassId !== undefined && obj.profile !== undefined && obj.points !== undefined 
+  return obj.belongedClassId !== undefined && obj.profile !== undefined && obj.points !== undefined && obj.classState !== undefined
 }

@@ -13,6 +13,7 @@ import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
 import ClassDetail from '../../pages/ClassDetail/ClassDetail';
 import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
+import EvaluateStudent from '../../pages/EvaluateStudent/EvaluateStudent';
 
 
 const  App = () => {
@@ -59,6 +60,7 @@ const  App = () => {
         <Route path="/login" element={<Login/>} ></Route>
         <Route path="/sign-up" element={<SignUp/>} ></Route>
         <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route>
+        <Route path="/evaluate-student/:userId" element={<EvaluateStudent/>}></Route>
         <Route path="/class-detail/:classId" element={<ClassDetail/>}></Route>
         <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
         <Route path="/create-class" element={<CreateClass/>}></Route>
