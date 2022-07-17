@@ -21,9 +21,34 @@ const TestCompo = () => {
     killer: false,
     apprentice: false
   });
+  const [textInputs, setTextInputs] = useState([
+    {
+      value: 'holi',
+      id: 1
+    },
+    {
+      value: 'holi2',
+      id: 2
+    },
+    {
+      value: 'holi3',
+      id: 3
+    },
+  ])
   const selectDropdownRef = useRef<any>();
   return (
     <div className={styles.login}>
+      {
+        textInputs.map((t, i) => (
+          <input type="text" key={t.id} value={t.value} onChange={(e) => {
+            setTextInputs(prev => {
+              const copy = [...prev];
+              copy[i].value = e.target.value;
+              return copy
+            })
+          }}/>
+        ))
+      }
       <LogOut/>
       <MainBtn text="Login" action={() => {setModalActive(true)}}/>
       <div>

@@ -31,6 +31,7 @@ export type ActivityType = {
   profile: string;
   profileActivities: {
     difficulty: Difficulty,
+    name: string,
     podiumFirst?: string,
     podiumSecond?: string,
     podiumThird?: string,

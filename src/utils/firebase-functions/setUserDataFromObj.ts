@@ -10,7 +10,6 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       id, 
       role, 
       profile: docData.profile,
-      points: docData.points,
       belongedClassId: docData.belongedClassId,
       universityId,
       messages,

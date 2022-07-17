@@ -52,15 +52,15 @@
   font-size: var(--h2);
   display: flex;
   flex-direction: column;
-  gap: var(--size3)  
+  gap: var(--size4)  
 }
 
 .create-class__topics__topic {
   display: flex;
   flex-direction: column;
   gap: var(--size2);
-  border-bottom: 2px solid var(--second-black);
-  padding: var(--size3) 0;
+  border-left: 3px solid var(--app-color);
+  padding: var(--size3) 0 0 var(--size2);
 }
 .create-class__topics__topic h3 {
   color: var(--app-color)
@@ -94,13 +94,15 @@
 }
 
 .create-class__topics__topic__activity {
+
   background: var(--second-main);
   border-radius: var(--border);
-  padding: var(--size2) var(--size3);
-  flex-grow: 1;
+  padding: var(--size2) var(--size2);
+  flex-grow: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--size4);
 }
 
 .create-class__topics__topic__activity div, p {
@@ -118,7 +120,7 @@
 .create-class__topics__topic__activity-container button {
   border: none;
   background: none;
-  padding-right: 5px;
+  flex-shrink: 0;
 }
 .create-class__topics__topic__activity-container button img {
   width: 100%;
@@ -154,4 +156,9 @@
 }
 .create-class__topics__topic__activity__difficulty p:last-child {
   border-bottom: none;
+}
+
+.activity-info {
+  display: flex;
+  gap: var(--size2)
 }

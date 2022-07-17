@@ -24,7 +24,6 @@ export type StudentType = UserType & {
   profile: {
     name: string,
   },
-  points: number,
   belongedClassId: string,
   classState: {
     points: number,
@@ -33,6 +32,7 @@ export type StudentType = UserType & {
       topicPoints: number,
       topicActivities: {
         id: string,
+        name: string,
         state: ActivityState,
         activityPodium?: ActivityPodium
       }[]
@@ -56,5 +56,5 @@ export function isTeacherType(obj: any): obj is TeacherType {
 }
 
 export function isStudentType(obj: any): obj is StudentType {
-  return obj.belongedClassId !== undefined && obj.profile !== undefined && obj.points !== undefined && obj.classState !== undefined
+  return obj.belongedClassId !== undefined && obj.profile !== undefined && obj.classState !== undefined
 }

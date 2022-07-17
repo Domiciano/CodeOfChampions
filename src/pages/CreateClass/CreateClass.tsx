@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import uniqid from 'uniqid';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import styles from './CreateClass.module.css';
@@ -40,8 +40,9 @@ const CreateClass = () => {
   const profilesSelectDropdownRef = useRef<any>();
   const topicsSelectDropdownRef = useRef<any>();
   const levelDifficultySelectDropdownRef = useRef<any>();
+  const elementsRef = useRef(topics.map(() => createRef()));
   const dispatch = useDispatch();
-
+  
   const handleToggleProfile = (currentProfile: ProfileDataType) => {
     setProfiles(prev => {
       const currentIndex = prev.findIndex(p => p.name === currentProfile.name);
@@ -66,6 +67,7 @@ const CreateClass = () => {
       })
       return prevCopy;
     })
+    console.log(elementsRef)
   };
 
   const setTopicsPlaceHolder = (data: TopicDataSelect[]) => {
@@ -85,6 +87,7 @@ const CreateClass = () => {
         podiumSecond: '',
         podiumThird: '',
         activityId: uniqid(),
+        name: "activity"
       })
       return prevCopy;
     })
@@ -104,6 +107,15 @@ const CreateClass = () => {
       const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
       prevCopy[topicIndex].activities[activityIndex].profileActivities[profileActivityIndex].difficulty = difficulty;
+      return prevCopy;
+    })
+    levelDifficultySelectDropdownRef.current.close();
+  }
+
+  const handleChangeActivityName = (currentTopicIndex: number, activityIndex: number, profileActivityIndex: number, name: string) => {
+    setTopics(prev => {
+      let prevCopy = [...prev];
+      prevCopy[currentTopicIndex].activities[activityIndex].profileActivities[profileActivityIndex].name = name;
       return prevCopy;
     })
   }
@@ -133,8 +145,9 @@ const CreateClass = () => {
       isActive: true,
       studentsId: []
     }
-    console.log(classCreated);
-    dispatch(addNewClass(db, classCreated, () => {navigate("/")}));
+    if(classCreated.term !== "" && classCreated.schedule !== "" && classCreated.profiles.length > 0 && classCreated.topics.length > 0){
+      dispatch(addNewClass(db, classCreated, () => {navigate("/")}));
+    }
   }
 
   useEffect(() => {
@@ -234,16 +247,26 @@ const CreateClass = () => {
                         <div className={styles['create-class__topics__topic__activities']}>
                           {
                             currentActivity.profileActivities.map((activity, index) => (
-                              <div key={Math.random().toFixed(5)} className={styles['create-class__topics__topic__activity-container']}>
+                              <div key={activity.activityId} className={styles['create-class__topics__topic__activity-container']}>
                                 <div className={styles['create-class__topics__topic__activity']}>
-                                  <p>{index + 1}. Activity</p>
+                                  <div className={styles['activity-info']}>
+                                    <h4>{index + 1}</h4>
+                                    <TextInput
+                                      onChangeInputValue={(value: string) => {
+                                        handleChangeActivityName(topicIndex, currentActivityIndex, index, value);
+                                      }}
+                                      placeholder=""
+                                      label=""
+                                      value={activity.name}
+                                    />
+                                  </div>
                                   <SelectDropDown ref={levelDifficultySelectDropdownRef} placeholder={topics[topicIndex].activities[currentActivityIndex].profileActivities[index].difficulty}>
                                     <div className={styles['create-class__topics__topic__activity__difficulty']}>
                                       {DIFFICULTIES.map(d => <p key={d} onClick={handleSetDifficulty.bind(null, topic, currentActivityIndex, index, d)}>{d}</p>)}
                                     </div>
                                   </SelectDropDown>
                                 </div>
-                                <button type="button" onClick={handleDeleteActivity.bind(null, topic, currentActivityIndex, index)}>
+                                <button className={styles['delete-button']} type="button" onClick={handleDeleteActivity.bind(null, topic, currentActivityIndex, index)}>
                                   <img src={cancelIcon} alt="delete" />
                                 </button>
                               </div>

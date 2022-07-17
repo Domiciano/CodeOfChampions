@@ -21,7 +21,7 @@ const ClassDetail = () => {
   const filterStudentsByProfile = useCallback((profile: string) => {
     setFilteredUsers(classUsers.filter(u => {
       return u.profile.name === profile
-    }))
+    }).sort((a,b) => b.classState.points - a.classState.points))
     setSelectedProfileFilter(profile);
   }, [classUsers])
 
@@ -44,7 +44,7 @@ const ClassDetail = () => {
 
   return (
     <div className={styles['class-detail']}>
-      <Back/>
+      <Back route="/" />
       <article className={styles['class-detail__filter-actions']}>
         {currentClass?.profiles.map(profile => (
           <button
@@ -63,7 +63,7 @@ const ClassDetail = () => {
             rank={index + 1} 
             name={user.name} 
             studentId={user.universityId} 
-            points={0} 
+            points={user.classState.points} 
             isTeacher 
             id={user.id}
           />

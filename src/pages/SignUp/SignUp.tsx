@@ -107,19 +107,19 @@ const SignUp = () => {
         profile: {
           name: classProfiles.find(p => p.isChecked)?.name || "Apprentice"
         },
-        points: 0,
         belongedClassId: classSelect?.classId || '',
         universityId: id.content,
         messages: [],
         classState: {
           points: 0,
           topics: classSelect?.topics.map(topic => {
-            if (classProfiles.find(p => p.isChecked)?.name === 'killer') {
+            if (classProfiles.find(p => p.isChecked)?.name === 'Killer') {
               return {
                 name: topic.name,
                 topicPoints: 0,
-                topicActivities: topic.activities.find(t => t.profile === 'killer')?.profileActivities.map(pa => ({
+                topicActivities: topic.activities.find(t => t.profile === 'Killer')?.profileActivities.map(pa => ({
                   id: pa.activityId,
+                  name: pa.name,
                   state: 'none',
                   activityPodium: 'none'
                 })) || []
@@ -128,8 +128,9 @@ const SignUp = () => {
               return {
                 name: topic.name,
                 topicPoints: 0,
-                topicActivities: topic.activities.find(t => t.profile === 'Killer')?.profileActivities.map(pa => ({
+                topicActivities: topic.activities.find(t => t.profile === 'Apprentice')?.profileActivities.map(pa => ({
                   id: pa.activityId,
+                  name: pa.name,
                   state: 'none',
                 })) || []
               }

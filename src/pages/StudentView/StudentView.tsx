@@ -27,6 +27,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
       setActiveMessages(false);
     }))
   }  
+  console.log(studentUser.messages)
   return (
     <div className={styles['student-view']}>
       { studentUser.messages.length > 0 && activeMessages &&(
