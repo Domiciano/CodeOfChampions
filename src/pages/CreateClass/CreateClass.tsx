@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import uniqid from 'uniqid';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
 import styles from './CreateClass.module.css';
@@ -11,23 +11,17 @@ import MainBtn from '../../components/MainBtn/MainBtn';
 import SelectDropDown from '../../components/SelectDropDown/SelectDropDown';
 import data from '../../data/profiles.json';
 import CheckBox from '../../components/CheckBox/CheckBox';
-import plusIcon from '../../img/svg/plus.svg';
-import cancelIcon from '../../img/svg/cancel.svg';
 import { 
   ProfileDataType, 
   ClassType, 
   ProfileDataSelect, 
   TopicDataSelect, 
   ActivityType, 
-  Difficulty 
+  Difficulty, 
+  TopicDataType
 } from '../../types/classes';
 import { addNewClass } from '../../store/class-slice';
-
-const DIFFICULTIES: Difficulty[]  = [
-  'easy',
-  'medium',
-  'hard'
-];
+import EditTopics from '../../components/EditTopics/EditTopics';
 
 const CreateClass = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -40,7 +34,6 @@ const CreateClass = () => {
   const profilesSelectDropdownRef = useRef<any>();
   const topicsSelectDropdownRef = useRef<any>();
   const levelDifficultySelectDropdownRef = useRef<any>();
-  const elementsRef = useRef(topics.map(() => createRef()));
   const dispatch = useDispatch();
   
   const handleToggleProfile = (currentProfile: ProfileDataType) => {
@@ -67,7 +60,6 @@ const CreateClass = () => {
       })
       return prevCopy;
     })
-    console.log(elementsRef)
   };
 
   const setTopicsPlaceHolder = (data: TopicDataSelect[]) => {
@@ -75,7 +67,7 @@ const CreateClass = () => {
     return text.length < 40 ? text : `${text.substring(0,40)}...`;
   }
 
-  const addNewActivity = (currentTopic: TopicDataSelect, currentActivity: ActivityType) => {
+  const addNewActivity = (currentTopic: TopicDataType, currentActivity: ActivityType) => {
     setTopics(prev => {
       const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -93,7 +85,7 @@ const CreateClass = () => {
     })
   }
 
-  const handleDeleteActivity = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number) => {
+  const handleDeleteActivity = (currentTopic: TopicDataType, activityIndex: number, profileActivityIndex: number) => {
     setTopics(prev => {
       const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -102,7 +94,7 @@ const CreateClass = () => {
     })
   }
 
-  const handleSetDifficulty = (currentTopic: TopicDataSelect, activityIndex: number, profileActivityIndex: number, difficulty: Difficulty) => {
+  const handleSetDifficulty = (currentTopic: TopicDataType, activityIndex: number, profileActivityIndex: number, difficulty: Difficulty) => {
     setTopics(prev => {
       const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
       let prevCopy = [...prev];
@@ -226,61 +218,14 @@ const CreateClass = () => {
             </div>
           </SelectDropDown>
         </div>
-        <div className={styles['create-class__topics']}>
-          {
-            topics.filter(p => p.isChecked).map((topic, topicIndex) => (
-              <div key={topic.name} className={styles['create-class__topics__topic']}>
-                <h3>{topic.name}</h3>
-                <div className={styles['create-class__topics__topic__action']}>
-                  {
-                    topic.activities.map((currentActivity, currentActivityIndex ) => (
-                      <article 
-                        key={currentActivity.profile}
-                        className={styles['activities-container']}
-                      >
-                        <header>
-                          <h4>{currentActivity.profile} <b style={{color: 'var(--second-white)'}}>activities</b></h4>
-                          <button type="button" onClick={addNewActivity.bind(null, topic, currentActivity)}>
-                            <img src={plusIcon} alt="plus" />
-                          </button>
-                        </header>
-                        <div className={styles['create-class__topics__topic__activities']}>
-                          {
-                            currentActivity.profileActivities.map((activity, index) => (
-                              <div key={activity.activityId} className={styles['create-class__topics__topic__activity-container']}>
-                                <div className={styles['create-class__topics__topic__activity']}>
-                                  <div className={styles['activity-info']}>
-                                    <h4>{index + 1}</h4>
-                                    <TextInput
-                                      onChangeInputValue={(value: string) => {
-                                        handleChangeActivityName(topicIndex, currentActivityIndex, index, value);
-                                      }}
-                                      placeholder=""
-                                      label=""
-                                      value={activity.name}
-                                    />
-                                  </div>
-                                  <SelectDropDown ref={levelDifficultySelectDropdownRef} placeholder={topics[topicIndex].activities[currentActivityIndex].profileActivities[index].difficulty}>
-                                    <div className={styles['create-class__topics__topic__activity__difficulty']}>
-                                      {DIFFICULTIES.map(d => <p key={d} onClick={handleSetDifficulty.bind(null, topic, currentActivityIndex, index, d)}>{d}</p>)}
-                                    </div>
-                                  </SelectDropDown>
-                                </div>
-                                <button className={styles['delete-button']} type="button" onClick={handleDeleteActivity.bind(null, topic, currentActivityIndex, index)}>
-                                  <img src={cancelIcon} alt="delete" />
-                                </button>
-                              </div>
-                            ))
-                          }
-                        </div>
-                      </article>
-                    ))
-                  }
-                </div>
-              </div>
-            ))
-          }
-        </div>
+        <EditTopics 
+          topics={topics.filter(t => t.isChecked)} 
+          addNewActivity={addNewActivity} 
+          handleChangeActivityName={handleChangeActivityName} 
+          levelDifficultySelectDropdownRef={levelDifficultySelectDropdownRef} 
+          handleSetDifficulty={handleSetDifficulty} 
+          handleDeleteActivity={handleDeleteActivity}
+        />
         <div className={styles['submit']}>
           <MainBtn text="Create Class" action={() => {}} />
         </div>

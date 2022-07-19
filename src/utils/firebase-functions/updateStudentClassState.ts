@@ -9,7 +9,6 @@ export const updateStudentClassState = (db: Firestore, userId: string, classStat
     topicPoints: number,
     topicActivities: {
       id: string,
-      name: string,
       state: ActivityState,
       activityPodium?: ActivityPodium
     }[]

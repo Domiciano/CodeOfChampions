@@ -14,6 +14,7 @@ import ClassDetail from '../../pages/ClassDetail/ClassDetail';
 import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
 import EvaluateStudent from '../../pages/EvaluateStudent/EvaluateStudent';
+import EditClass from '../../pages/EditClass/EditClass';
 
 
 const  App = () => {
@@ -64,6 +65,7 @@ const  App = () => {
         <Route path="/class-detail/:classId" element={<ClassDetail/>}></Route>
         <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
         <Route path="/create-class" element={<CreateClass/>}></Route>
+        <Route path="/edit-class/:classId" element={<EditClass/>}></Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

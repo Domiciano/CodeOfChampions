@@ -32,7 +32,6 @@ export type StudentType = UserType & {
       topicPoints: number,
       topicActivities: {
         id: string,
-        name: string,
         state: ActivityState,
         activityPodium?: ActivityPodium
       }[]

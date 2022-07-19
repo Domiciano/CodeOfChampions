@@ -12,7 +12,7 @@ import {
   arrayUnion, 
   getDoc
 } from "firebase/firestore";
-import { ClassType, SelectClassType } from '../types/classes';
+import { ClassType, SelectClassType, TopicDataType } from '../types/classes';
 
 
 
@@ -111,6 +111,8 @@ export const getActiveClasses = (db: Firestore ) => {
     dispatch(classSlice.actions.fetchClassesToSelect({classes: currentClasses}));
   }
 }
+
+
 
 
 export default classSlice;

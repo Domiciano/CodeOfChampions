@@ -40,3 +40,15 @@
   bottom: -2px;
   left: 0;
 }
+
+.class-detail__header{
+  display: flex;
+  justify-content: space-between;
+}
+.class-detail__header button {
+  border: none;
+  background: none;
+}
+.class-detail__header button img {
+  display: block
+}

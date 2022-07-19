@@ -8,6 +8,7 @@ import { StudentType } from "../../types/user";
 import Back from '../../components/Back/Back';
 import styles from './ClassDetail.module.css';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
+import settingsIcon from '../../img/svg/settings.svg';
 
 const ClassDetail = () => {
   const navigate = useNavigate();
@@ -44,7 +45,14 @@ const ClassDetail = () => {
 
   return (
     <div className={styles['class-detail']}>
-      <Back route="/" />
+      <header className={styles['class-detail__header']}>
+        <Back route="/" />
+        <button onClick={() => {
+          navigate(`/edit-class/${currentClass?.classId}`);
+        }}>
+          <img src={settingsIcon} alt="settings" />
+        </button>
+      </header>
       <article className={styles['class-detail__filter-actions']}>
         {currentClass?.profiles.map(profile => (
           <button
