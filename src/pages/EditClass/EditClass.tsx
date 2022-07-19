@@ -10,7 +10,8 @@ import MainBtn from '../../components/MainBtn/MainBtn';
 import Back from '../../components/Back/Back';
 import { getClassByID } from '../../utils/firebase-functions/getClassByID';
 import { updateClassTopics } from '../../utils/firebase-functions/updateClassTopics';
-
+import { updateClassActiveState } from '../../utils/firebase-functions/updateClassActiveState';
+import CheckBox from '../../components/CheckBox/CheckBox';
 import uniqid from 'uniqid';
 
 const EditClass = () => {
@@ -18,6 +19,7 @@ const EditClass = () => {
   const { classId } = useParams();
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const [topics, setTopics] = useState<TopicDataType[] | null>();
+  const [classIsActive, setClassIsActive] = useState<boolean | null>(null);
   const levelDifficultySelectDropdownRef = useRef<any>();
 
   const addNewActivity = (currentTopic: TopicDataType, currentActivity: ActivityType) => {
@@ -81,8 +83,15 @@ const EditClass = () => {
     if(!topics || !currentClassReference) return
     const currentClassProfilesWithActivities = currentClassReference.profiles.filter(p => p.hasActivities).map(p => p.name);
     updateClassTopics(db, currentClassProfilesWithActivities, classId, topics, () => {
+      if(classIsActive !== null){
+        updateClassActiveState(db, classId, classIsActive)
+      }
       navigate(`/class-detail/${currentClassReference.classId}`)
     })
+  }
+
+  const handleClassActiveState = () => {
+    setClassIsActive(prev => !prev);
   }
   
   useEffect(() => {
@@ -92,6 +101,7 @@ const EditClass = () => {
         const dataInfo = doc.data();
         if(dataInfo){
           setTopics(dataInfo.topics)
+          setClassIsActive(dataInfo.isActive);
         }
       })
 
@@ -99,6 +109,12 @@ const EditClass = () => {
   return (
     <div className={styles['edit-class']}>
       <Back/>
+      <div className={styles['set-active-state']}>
+        <h4>Class Active State</h4>
+        <button onClick={handleClassActiveState}>
+          {classIsActive !== null && <CheckBox isActive={classIsActive}/>}
+        </button>
+      </div>
       {topics && 
         <EditTopics 
           topics={topics} 

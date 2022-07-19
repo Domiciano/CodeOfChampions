@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { setOnAuthState } from '../../store/userAuth-slice';
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { Navigate, Route, Routes } from "react-router-dom";
-import { getActiveClasses } from '../../store/class-slice';
 // * Pages
 import TestCompo from '../../pages/TestCompo/TestCompo';
 import Login from '../../pages/Login/Login';
@@ -23,7 +22,6 @@ const  App = () => {
   
   useEffect(() => {
     dispatch(setOnAuthState(auth, db));
-    dispatch(getActiveClasses(db));
   }, [dispatch]);
 
   // * Create user from Email and Password

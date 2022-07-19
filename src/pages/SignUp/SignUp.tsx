@@ -13,7 +13,7 @@ import UserIcon from '../../components/UI/UserIcon/UserIcon';
 import Lock from '../../components/UI/Lock/Lock';
 import MainBtn from '../../components/MainBtn/MainBtn';
 import { addNewUserToFirestore, logOutUser } from '../../store/userAuth-slice';
-import { InitialStateType } from '../../store/class-slice';
+import { getActiveClasses, InitialStateType } from '../../store/class-slice';
 import SelectProfiles from '../../components/SelectProfiles/SelectProfiles';
 import { ProfileDataSelect, SelectClassType } from '../../types/classes';
 import ErrorMsg from '../../components/ErrorMsg/ErrorMsg';
@@ -47,7 +47,7 @@ const SignUp = () => {
     if (!(role === 'teacher' || role === 'student')){
       navigate('/login')
     }
-    
+    dispatch(getActiveClasses(db));
   }, [dispatch, navigate, role])
 
   const handleClassThumbClick = (classData: SelectClassType) => {

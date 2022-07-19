@@ -13,19 +13,18 @@ import styles from './EvaluateStudent.module.css';
 import StudentInfo from '../../components/StudentInfo/StudentInfo';
 import { updateStudentClassState } from '../../utils/firebase-functions/updateStudentClassState';
 import { sendMessage } from '../../utils/firebase-functions/sendMessage';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import data from '../../data/profiles.json';
-// import { InitialStateType } from '../../store/class-slice';
+import { InitialStateType } from '../../store/class-slice';
 
 const activityStateOPtions: ActivityState[] = ["none", "complete", "almost"];
 
 const EvaluateStudent = () => {
   const [currentUser, setCurrentUser] = useState<StudentType | null>();
-  // const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
+  const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const { userId } = useParams();
   const navigate = useNavigate();
   const activityStateRef = useRef<any>();
-  
   const handleActivityState = (topicIndex: number, activityIndex: number, state: ActivityState) => {
     activityStateRef.current.close();
     // const currentClassData = userClasses.find(c => c.classId === currentUser?.belongedClassId);
@@ -80,7 +79,9 @@ const EvaluateStudent = () => {
 
   useEffect(() => {
     if(!userId) return
-    console.log(userId)
+    if(userClasses.length === 0){
+      navigate('/');
+    }
     getCurrentUser(userId, db)
       .then(_currentUser => {
         const currentUserData = _currentUser.data();
@@ -93,7 +94,7 @@ const EvaluateStudent = () => {
           }
         }
       })
-  }, [navigate, userId]);
+  }, [navigate, userClasses.length, userId]);
   
   return (
     <div className={styles['evaluate-student']}>
@@ -110,16 +111,21 @@ const EvaluateStudent = () => {
             currentUser.classState.topics.map((topic, topicIndex) => (
               <div key={topic.name} className={styles['topic']}>
                 <h3>{topic.name}: {topic.topicPoints}</h3>
-                {topic.topicActivities.map((ta, taIndex) => (
-                  <div key={ta.id} className={styles['activity']}>
-                    <p className={styles['activity-tag']}>{taIndex+1} Activity </p>
-                    <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
-                      {activityStateOPtions.map(activityState => (
-                        <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
-                      ))}
-                    </SelectDropDown>
-                  </div>
-                ))}
+                {topic.topicActivities.map((ta, taIndex) => {
+                  const currentUserClass = userClasses.find(uc => uc.classId === currentUser.belongedClassId);
+                  const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
+                  
+                  return (
+                    <div key={ta.id} className={styles['activity']}>
+                      <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
+                      <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
+                        {activityStateOPtions.map(activityState => (
+                          <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
+                        ))}
+                      </SelectDropDown>
+                    </div>
+                  )
+                })}
               </div>
             ))
           }

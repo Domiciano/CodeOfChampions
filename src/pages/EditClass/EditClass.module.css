@@ -1,3 +1,18 @@
 .edit-class {
-  padding: var(--size3)
+  padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size4)
+}
+
+.set-active-state {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--main-white);
+}
+
+.set-active-state button {
+  border: none;
+  background: none;
 }
