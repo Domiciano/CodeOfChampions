@@ -53,10 +53,10 @@ const ProgressBar: React.FC<ProgressBarInterface> = ({ student }) => {
           ))
         }
       </div>
-        <div className={styles['footer']}>
-          <p>Detail</p>
-          <Arrow right/>
-        </div>
+      {false && <div className={styles['footer']}>
+        <p>Detail</p>
+        <Arrow right/>
+      </div>}
     </Link>
   )
 }

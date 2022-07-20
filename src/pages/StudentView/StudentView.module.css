@@ -15,3 +15,30 @@
   flex-direction: column;
   gap: var(--size3)
 }
+
+.profile {
+  display: flex;
+  padding: var(--size2);
+  gap: var(--size2);
+  border-bottom: 2px solid var(--second-black);
+  color: var(--main-white);
+}
+
+.profile:last-child {
+  border-bottom: none;
+}
+.ranking-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3);
+}
+
+.ranking-container .ranking-title {
+  color: var(--main-white);
+}
+
+.ranking-users {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+}
