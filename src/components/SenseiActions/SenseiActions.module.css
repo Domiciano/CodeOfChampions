@@ -1,0 +1,16 @@
+.user-to-select-container {}
+
+.user-to-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--main-white);
+  padding: var(--size3);
+  gap: var(--size2)
+}
+
+.no-apprentices {
+  font-size: var(--h1);
+  padding: var(--size3);
+  color: var(--main-white);
+}

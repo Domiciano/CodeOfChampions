@@ -10,12 +10,13 @@ interface UserThumbNailInterface {
   points: number;
   isTeacher: boolean;
   id: string;
+  listItem?: boolean;
 }
 
-const UserThumbNailContent: React.FC<UserThumbNailInterface> = ({ rank, name, studentId, points, id, isTeacher }) => {
+const UserThumbNailContent: React.FC<UserThumbNailInterface> = ({ rank, name, studentId, points, id, isTeacher, listItem }) => {
   return (
     <>
-        <h2>{rank}</h2>
+        {!listItem && <h2>{rank}</h2>}
         <div className={styles['user-thumb__info']}>
           <div className={styles['user-thumb__header']}>
             <h3>{name}</h3>
@@ -32,7 +33,7 @@ const UserThumbNailContent: React.FC<UserThumbNailInterface> = ({ rank, name, st
   )
 }
 
-const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId, points, id, isTeacher }) => {
+const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId, points, id, isTeacher, listItem }) => {
   const setRankPositionColor = (rankPosition: number) => {
     switch (rankPosition) {
       case 1:
@@ -46,7 +47,7 @@ const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId
     }
   }
 
-  const styleVar = `${styles['user-thumb']} ${rank <= 3 ? styles['user-thumb--podium'] : ''} ${setRankPositionColor(rank)}`;
+  const styleVar = `${styles['user-thumb']} ${(rank <= 3 && !listItem) ? styles['user-thumb--podium'] : ''} ${!listItem ? setRankPositionColor(rank) : ''}`;
   return (
     <>
       { isTeacher ? 
@@ -58,6 +59,7 @@ const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId
             points={points} 
             isTeacher={isTeacher} 
             id={id}
+            listItem={listItem}
           />
         </Link>
         : 
@@ -69,6 +71,7 @@ const UserThumbNail: React.FC<UserThumbNailInterface> = ({ rank, name, studentId
             points={points} 
             isTeacher={isTeacher} 
             id={id}
+            listItem={listItem}
           />
         </div> 
       }

@@ -1,6 +1,6 @@
 import { createSlice, Dispatch, AnyAction } from "@reduxjs/toolkit";
 import { StudentType, TeacherType, isStudentType, userMessage } from "../types/user";
-import { Firestore } from "firebase/firestore";
+import { Firestore, getDoc } from "firebase/firestore";
 import { setUserDataFromObj } from "../utils/firebase-functions/setUserDataFromObj";
 import {
   signInWithEmailAndPassword,
@@ -39,11 +39,27 @@ const userLoginSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
     },
+    updateStudent(state, action) {
+      state.user = action.payload.user
+    },
     setFetchingCurrentUserState(state, action) {
       state.isFetchingCurrentUser = action.payload.state;
     },
   },
 });
+
+export const updateStudentAsync = (db: Firestore, userId: string) => {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    const docRef = doc(db, "users", userId);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data(), '🔥');
+    const currentUserData = docSnap.data();
+    if (currentUserData === undefined) return;
+    dispatch(userLoginSlice.actions.updateStudent({
+      user:  setUserDataFromObj(currentUserData),
+    }))
+  }
+}
 
 // * Login user from firebase Auth method
 export const logUserAsync = (
@@ -165,7 +181,7 @@ export const deleteUserMessage = (db: Firestore, userID: string, message:userMes
         if(callback) callback();
       })
       .catch((error) => {
-        console.log('XD', error)
+        console.log(error);
       })
   };
 };

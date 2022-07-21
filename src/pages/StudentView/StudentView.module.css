@@ -42,3 +42,13 @@
   flex-direction: column;
   gap: var(--size2);
 }
+
+.sensei-students {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2)
+}
+
+.sensei-students__title {
+  color: var(--app-color)
+}

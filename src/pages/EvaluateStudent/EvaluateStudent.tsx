@@ -70,6 +70,7 @@ const EvaluateStudent = () => {
           }
           if(currentUser){
             updateStudentClassState(db, currentUser?.id, currentUser.classState, () => {
+              //TODO: update the redux object regarding this class
               navigate(`/class-detail/${currentUser?.belongedClassId}`)
             })
           }
@@ -107,7 +108,7 @@ const EvaluateStudent = () => {
         </header>
         <section className={styles['topics']}>
           {
-            currentUser && 
+            currentUser && currentUser.profile.name !== 'Sensei' && 
             currentUser.classState.topics.map((topic, topicIndex) => (
               <div key={topic.name} className={styles['topic']}>
                 <h3>{topic.name}: {topic.topicPoints}</h3>

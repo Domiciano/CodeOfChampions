@@ -1,9 +1,9 @@
 import { Firestore, query, collection, where, getDocs, } from "firebase/firestore";
 import { StudentType } from '../../types/user';
 
-export const getStudentsFromClass = async (db: Firestore, classId: string) => {
-  const teacherClasses = query(collection(db, "users"), where("belongedClassId", "==", classId));
-    const querySnapshot = await getDocs(teacherClasses);
+export const getSenseiStudents = async (db: Firestore, senseiId: string) => {
+  const apprentices = query(collection(db, "users"), where("senseiId", "==", senseiId));
+    const querySnapshot = await getDocs(apprentices);
     const users: StudentType[] = []
     querySnapshot.forEach((doc) => {
       const { 

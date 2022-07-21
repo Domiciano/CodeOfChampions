@@ -1,26 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './EditClass.module.css';
-import { db } from '../../utils/firebase-functions/getFirebaseInit';
+import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { InitialStateType } from '../../store/class-slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { InitialStateType, updateClassTopics } from '../../store/class-slice';
 import EditTopics from '../../components/EditTopics/EditTopics';
 import { ActivityType, Difficulty, TopicDataType } from '../../types/classes';
 import MainBtn from '../../components/MainBtn/MainBtn';
 import Back from '../../components/Back/Back';
 import { getClassByID } from '../../utils/firebase-functions/getClassByID';
-import { updateClassTopics } from '../../utils/firebase-functions/updateClassTopics';
+// import { updateClassTopics } from '../../utils/firebase-functions/updateClassTopics';
 import { updateClassActiveState } from '../../utils/firebase-functions/updateClassActiveState';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import uniqid from 'uniqid';
+import { logOutUser, userAuthInitStateType } from '../../store/userAuth-slice';
+import { isTeacherType } from '../../types/user';
 
 const EditClass = () => {
   const navigate = useNavigate();
   const { classId } = useParams();
+  const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
+  const isFetchingCurrentUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isFetchingCurrentUser);
+  const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn);
   const [topics, setTopics] = useState<TopicDataType[] | null>();
   const [classIsActive, setClassIsActive] = useState<boolean | null>(null);
   const levelDifficultySelectDropdownRef = useRef<any>();
+  const dispatch = useDispatch();
 
   const addNewActivity = (currentTopic: TopicDataType, currentActivity: ActivityType) => {
     setTopics(prev => {
@@ -82,12 +88,12 @@ const EditClass = () => {
     const currentClassReference = userClasses.find(c => c.classId === classId);
     if(!topics || !currentClassReference) return
     const currentClassProfilesWithActivities = currentClassReference.profiles.filter(p => p.hasActivities).map(p => p.name);
-    updateClassTopics(db, currentClassProfilesWithActivities, classId, topics, () => {
+    dispatch(updateClassTopics(db, currentClassReference.teacherId, currentClassProfilesWithActivities, classId, topics, () => {
       if(classIsActive !== null){
         updateClassActiveState(db, classId, classIsActive)
       }
       navigate(`/class-detail/${currentClassReference.classId}`)
-    })
+    }))
   }
 
   const handleClassActiveState = () => {
@@ -104,8 +110,28 @@ const EditClass = () => {
           setClassIsActive(dataInfo.isActive);
         }
       })
-
   }, [classId]);
+
+  useEffect(() => {
+    if(!isFetchingCurrentUser){
+      console.log('AAA', isLoggedIn);
+      // * At this moment, the fetch process is finished
+      // TODO: Check if there is a user login
+      if(!isLoggedIn){
+        navigate("/login");
+      }  
+    }
+
+    if(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)){
+      if(!loggedUser.isVerified){
+        dispatch(logOutUser(auth, () => {
+          navigate("/teacher-pending");
+        }))
+      }
+    }else {
+      navigate("/");
+    }
+  }, [dispatch, isFetchingCurrentUser, isLoggedIn, loggedUser, navigate]);
   return (
     <div className={styles['edit-class']}>
       <Back/>

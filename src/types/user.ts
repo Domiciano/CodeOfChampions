@@ -25,6 +25,8 @@ export type StudentType = UserType & {
     name: string,
   },
   belongedClassId: string,
+  studentsId?: string[],
+  senseiId?: string,
   classState: {
     points: number,
     topics: {
