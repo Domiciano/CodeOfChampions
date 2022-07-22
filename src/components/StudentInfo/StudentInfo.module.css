@@ -8,6 +8,7 @@
   width: 35px;
   height: 35px;
   border-radius: 100px;
+  overflow: hidden;
 }
 
 .student-info h1 {
@@ -25,4 +26,8 @@
 .student-info div {
   display: flex;
   flex-direction: column;
+}
+
+.profile-image {
+  width: 100%;
 }

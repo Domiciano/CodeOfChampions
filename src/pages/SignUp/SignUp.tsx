@@ -171,13 +171,13 @@ const SignUp = () => {
               <p className={styles['class-dropdown__tag']}>Class</p>  
               <SelectDropDown 
                 ref={selectDropdownRef} 
-                placeholder={classSelect ? `${classSelect.teacher} - ${classSelect.term}` : "Select a Class"}
+                placeholder={classSelect ? `${classSelect.teacherName} - ${classSelect.term}` : "Select a Class"}
               >
                 <div className={styles['sign-up__classes']}>
                   {activeClasses.map( classData => {
-                    const {term, schedule, classId, teacher} = classData;
+                    const {term, schedule, classId, teacherName} = classData;
                     return <SelectClassThumbnail 
-                    teacher={teacher}
+                    teacher={teacherName}
                     term={term}
                     schedule={schedule}
                     key={classId} 

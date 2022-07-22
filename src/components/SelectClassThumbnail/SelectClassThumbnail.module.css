@@ -7,16 +7,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: row;
 }
 
 .select-class-thumb__header h3 {
   color: var(--main-white);
   font-size: var(--h2);
+  display: block;
 }
 
 .select-class-thumb__header p {
   color: var(--second-white);
   font-size: var(--h1);
+  display: contents;
+  width: fit-content;
 }
 
 .select-class-thumb__footer {

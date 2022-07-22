@@ -40,7 +40,7 @@ export type ActivityType = {
 }
 
 export type SelectClassType = ClassType & {
-  teacher: string
+  teacherName: string
 }
 
 export type ProfileDataSelect = ProfileDataType & {

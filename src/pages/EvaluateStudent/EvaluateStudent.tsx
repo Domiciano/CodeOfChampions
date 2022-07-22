@@ -25,6 +25,7 @@ const EvaluateStudent = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const activityStateRef = useRef<any>();
+  const currentUserClass = userClasses.find(uc => uc.classId === currentUser?.belongedClassId);
   const handleActivityState = (topicIndex: number, activityIndex: number, state: ActivityState) => {
     activityStateRef.current.close();
     // const currentClassData = userClasses.find(c => c.classId === currentUser?.belongedClassId);
@@ -100,7 +101,15 @@ const EvaluateStudent = () => {
   return (
     <div className={styles['evaluate-student']}>
       <Back/>
-      {currentUser && <StudentInfo name={currentUser?.name} profile={currentUser?.profile.name} studentId={currentUser?.universityId}/>}
+      {
+        currentUser && 
+        <StudentInfo 
+          name={currentUser?.name} 
+          profile={currentUser?.profile.name} 
+          studentId={currentUser?.universityId}
+          image={currentUserClass?.profiles.find(p => p.name === currentUser.profile.name)?.img || ''}
+        />
+      }
       <form className={styles['form']} onSubmit={handleUpdateStudent}>
         <header className={styles['form__header']}>
           <h2>Topics</h2>
@@ -113,7 +122,7 @@ const EvaluateStudent = () => {
               <div key={topic.name} className={styles['topic']}>
                 <h3>{topic.name}: {topic.topicPoints}</h3>
                 {topic.topicActivities.map((ta, taIndex) => {
-                  const currentUserClass = userClasses.find(uc => uc.classId === currentUser.belongedClassId);
+                  
                   const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
                   
                   return (
