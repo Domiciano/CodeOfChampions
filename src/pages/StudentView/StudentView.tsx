@@ -87,7 +87,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
         name={studentUser.name} 
         profile={studentUser.profile.name}
         studentId={studentUser.universityId}
-        image={userClasses.profiles.find(p => p.name === studentUser.profile.name)?.img || ''}
+        image={userClasses?.profiles?.find(p => p.name === studentUser.profile.name)?.img || ''}
       />
       <ProgressBar student={studentUser}/>
       {studentUser.profile.name !== 'Sensei' &&
