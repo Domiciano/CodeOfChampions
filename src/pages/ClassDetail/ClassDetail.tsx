@@ -21,7 +21,7 @@ const ClassDetail = () => {
 
   const filterStudentsByProfile = useCallback((profile: string) => {
     setFilteredUsers(classUsers.filter(u => {
-      return u.profile.name === profile
+      return u.profile.name.toLowerCase() === profile.toLowerCase()
     }).sort((a,b) => b.classState.points - a.classState.points))
     setSelectedProfileFilter(profile);
   }, [classUsers])

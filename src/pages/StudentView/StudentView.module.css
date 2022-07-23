@@ -43,12 +43,35 @@
   gap: var(--size2);
 }
 
-.sensei-students {
+.senpai-students {
   display: flex;
   flex-direction: column;
   gap: var(--size2)
 }
 
-.sensei-students__title {
+.senpai-students__title {
   color: var(--app-color)
+}
+
+.apprentice-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.apprentice-info__name {
+  display: flex;
+  align-items: center;
+  color: var(--main-white);
+  gap: var(--size2);
+}
+
+.apprentice-container {
+  background-color: var(--second-main);
+  padding: var(--size2);
+  border-radius: var(--border)
+}
+
+.apprentice-container:link{
+  text-decoration: none
 }

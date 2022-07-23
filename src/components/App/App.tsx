@@ -12,45 +12,16 @@ import PendingTeacher from '../../pages/PendingTeacher/PendingTeacher';
 import ClassDetail from '../../pages/ClassDetail/ClassDetail';
 import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
-import EvaluateStudent from '../../pages/EvaluateStudent/EvaluateStudent';
+import StudentTopicsDetail from '../../pages/StudentTopicsDetail/StudentTopicsDetail';
 import EditClass from '../../pages/EditClass/EditClass';
 
 
 const  App = () => {
-  const dispatch = useDispatch();
-  // const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn);
-  
+  const dispatch = useDispatch();  
   useEffect(() => {
     dispatch(setOnAuthState(auth, db));
   }, [dispatch]);
 
-  // * Create user from Email and Password
-  // const onCreateNewUser = (user: string) => {
-  //   const dummyUser: UserType = {
-  //     first: user,
-  //     last: "San",
-  //     born: 2001,
-  //     id: '',
-  //     role: 'student'
-  //   }
-  //   dispatch(addNewUserToFirestore(db, dummyUser, auth, setAllUsersData, `${user}@mail.com`, 'Ergo007/'))
-  //   .then()
-  //   .catch(error => {
-  //     console.log('SIP')
-  //   })
-  // }
-  // * Login User By Email and Password
-  // const handleLoginTeacher = () => {
-  //   dispatch(logUserAsync(auth, db, 'ty@mail.com', 'Ergo007/', setAllUsersData));
-  // }
-  // const handleLoginStudent = () => {
-  //   dispatch(logUserAsync(auth, db, 'student@mail.com', 'Ergo007/', setAllUsersData));
-  // }
-  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e: any) => {
-  //   e.preventDefault();
-  //   console.log(e.target.user.value);
-  //   onCreateNewUser(e.target.user.value);
-  // }
   return (
     <>
       <Routes>
@@ -59,7 +30,8 @@ const  App = () => {
         <Route path="/login" element={<Login/>} ></Route>
         <Route path="/sign-up" element={<SignUp/>} ></Route>
         <Route path="/user-detail/:userId" element={<StudentDetail/>}></Route>
-        <Route path="/evaluate-student/:userId" element={<EvaluateStudent/>}></Route>
+        <Route path="/evaluate-student/:userId" element={<StudentTopicsDetail editing/>}></Route>
+        <Route path="/student-topics-detail/:userId" element={<StudentTopicsDetail editing={false}/>}></Route>
         <Route path="/class-detail/:classId" element={<ClassDetail/>}></Route>
         <Route path="/teacher-pending" element={<PendingTeacher/>}></Route>
         <Route path="/create-class" element={<CreateClass/>}></Route>

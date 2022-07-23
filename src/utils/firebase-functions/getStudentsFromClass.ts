@@ -27,8 +27,8 @@ export const getStudentsFromClass = async (db: Firestore, classId: string) => {
         belongedClassId,
         messages,
         classState,
-        senseiId: profile.name === 'Apprentice' ? doc.data().senseiId ? doc.data().senseiId : '' : '',
-        studentsId: profile.name === 'Sensei' ? doc.data().studentsId : [],
+        senpaiId: profile.name === 'Apprentice' ? doc.data().senpaiId ? doc.data().senpaiId : '' : '',
+        studentsId: profile.name === 'senpai' ? doc.data().studentsId : [],
       };
       users.push(currentUser);
     });

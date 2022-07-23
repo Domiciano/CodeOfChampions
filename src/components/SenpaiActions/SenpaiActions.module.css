@@ -1,12 +1,19 @@
-.user-to-select-container {}
+.user-to-select-container {
+  padding: var(--size2) 0;
+}
 
 .user-to-select {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: var(--main-white);
-  padding: var(--size3);
-  gap: var(--size2)
+  padding: var(--size2);
+  gap: var(--size2);
+  border-bottom: 2px solid var(--second-black);
+}
+
+.user-to-select:last-child {
+  border-bottom: none;
 }
 
 .no-apprentices {

@@ -9,7 +9,7 @@ import { setUserDataFromObj } from '../../utils/firebase-functions/setUserDataFr
 import MainBtn from '../../components/MainBtn/MainBtn';
 import Back from '../../components/Back/Back';
 import SelectDropDown from '../../components/SelectDropDown/SelectDropDown';
-import styles from './EvaluateStudent.module.css';
+import styles from './StudentTopicsDetail.module.css';
 import StudentInfo from '../../components/StudentInfo/StudentInfo';
 import { updateStudentClassState } from '../../utils/firebase-functions/updateStudentClassState';
 import { sendMessage } from '../../utils/firebase-functions/sendMessage';
@@ -19,7 +19,11 @@ import { InitialStateType } from '../../store/class-slice';
 
 const activityStateOPtions: ActivityState[] = ["none", "complete", "almost"];
 
-const EvaluateStudent = () => {
+interface StudentTopicsDetailInterface {
+  editing: boolean;
+}
+
+const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) => {
   const [currentUser, setCurrentUser] = useState<StudentType | null>();
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const { userId } = useParams();
@@ -28,7 +32,6 @@ const EvaluateStudent = () => {
   const currentUserClass = userClasses.find(uc => uc.classId === currentUser?.belongedClassId);
   const handleActivityState = (topicIndex: number, activityIndex: number, state: ActivityState) => {
     activityStateRef.current.close();
-    // const currentClassData = userClasses.find(c => c.classId === currentUser?.belongedClassId);
     setCurrentUser(prev => {
       if(!prev) return;
       const copyPrev = {...prev};
@@ -107,7 +110,7 @@ const EvaluateStudent = () => {
           name={currentUser?.name} 
           profile={currentUser?.profile.name} 
           studentId={currentUser?.universityId}
-          image={currentUserClass?.profiles.find(p => p.name === currentUser.profile.name)?.img || ''}
+          image={currentUserClass?.profiles.find(p => p.name.toLowerCase() === currentUser.profile.name.toLowerCase())?.img || ''}
         />
       }
       <form className={styles['form']} onSubmit={handleUpdateStudent}>
@@ -117,7 +120,7 @@ const EvaluateStudent = () => {
         </header>
         <section className={styles['topics']}>
           {
-            currentUser && currentUser.profile.name !== 'Sensei' && 
+            currentUser && currentUser.profile.name !== 'senpai' && 
             currentUser.classState.topics.map((topic, topicIndex) => (
               <div key={topic.name} className={styles['topic']}>
                 <h3>{topic.name}: {topic.topicPoints}</h3>
@@ -128,11 +131,12 @@ const EvaluateStudent = () => {
                   return (
                     <div key={ta.id} className={styles['activity']}>
                       <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
-                      <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
+                      {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
                         {activityStateOPtions.map(activityState => (
                           <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
                         ))}
-                      </SelectDropDown>
+                      </SelectDropDown>}
+                      {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
                     </div>
                   )
                 })}
@@ -140,10 +144,10 @@ const EvaluateStudent = () => {
             ))
           }
         </section>
-        <MainBtn text={'Update'} action={() => {}}/>
+        {editing && <MainBtn text={'Update'} action={() => {}}/>}
       </form>
     </div>
   )
 }
 
-export default EvaluateStudent
+export default StudentTopicsDetail

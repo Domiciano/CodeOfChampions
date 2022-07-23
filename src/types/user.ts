@@ -4,7 +4,7 @@ export type UserType = {
   name: string, 
   id: string,
   email: string,
-  role: 'teacher' | 'student',
+  role: 'teacher' | 'student' | 'admin',
   universityId: string,
   messages: userMessage[];
 };
@@ -26,7 +26,7 @@ export type StudentType = UserType & {
   },
   belongedClassId: string,
   studentsId?: string[],
-  senseiId?: string,
+  senpaiId?: string,
   classState: {
     points: number,
     topics: {

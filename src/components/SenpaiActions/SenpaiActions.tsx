@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../../utils/firebase-functions/getFirebaseInit';
-import MainBtn from '../../components/MainBtn/MainBtn';
+import MainBtn from '../MainBtn/MainBtn';
 import Modal from '../Modal/Modal';
 import { ClassType } from "../../types/classes";
 import { getStudentsFromClass } from '../../utils/firebase-functions/getStudentsFromClass';
 import { StudentType } from '../../types/user';
 import { useDispatch } from 'react-redux';
-import CheckBox from '../../components/CheckBox/CheckBox';
-import styles from './SenseiActions.module.css';
-import { pairingAppreniceSensei } from '../../store/class-slice';
+import CheckBox from '../CheckBox/CheckBox';
+import styles from './SenpaiActions.module.css';
+import { pairingApprenicesenpai } from '../../store/class-slice';
 
-interface SenseiActionsInterface {
+interface SenpaiActionsInterface {
   userClass: ClassType,
   userId: string
 }
@@ -19,7 +19,7 @@ type StudentChecked = StudentType & {
   isChecked: boolean
 }
 
-const SenseiActions: React.FC<SenseiActionsInterface> = ({userClass, userId}) => {
+const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId}) => {
   const [modalActive, setModalActive] = useState(false);
   const [classUsers, setClassUsers] = useState<StudentChecked[]>([]);
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const SenseiActions: React.FC<SenseiActionsInterface> = ({userClass, userId}) =>
   const handleSubmit = () => {
     console.log(classUsers.filter(student => student.isChecked))
     const selectedStudents = classUsers.filter(student => student.isChecked).map(s => s.id);
-    dispatch(pairingAppreniceSensei(db, userId, selectedStudents, () => {
+    dispatch(pairingApprenicesenpai(db, userId, selectedStudents, () => {
       handleToggleMessageModal();
     }))
     
@@ -50,10 +50,10 @@ const SenseiActions: React.FC<SenseiActionsInterface> = ({userClass, userId}) =>
     getStudentsFromClass(db, userClass.classId)
     .then(usersData => {
       setClassUsers(usersData.filter(user => {
-        console.log(user.senseiId, 'sd')
+        console.log(user.senpaiId, 'sd')
         return (
           user.profile.name === 'Apprentice' &&
-          user.senseiId === ''
+          user.senpaiId === ''
         )
       }).map(s => ({...s, isChecked: false})));
     })
@@ -93,4 +93,4 @@ const SenseiActions: React.FC<SenseiActionsInterface> = ({userClass, userId}) =>
   )
 }
 
-export default SenseiActions
+export default SenpaiActions

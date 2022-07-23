@@ -185,11 +185,11 @@ export const updateClassTopics = (db: Firestore, teacherId: string,  classProfil
   }
 }
 
-export const pairingAppreniceSensei = (db: Firestore, sensei: string, apprenticesId: string[], callback: Function) => {
+export const pairingApprenicesenpai = (db: Firestore, senpai: string, apprenticesId: string[], callback: Function) => {
   return async (dispatch: Dispatch<AnyAction>) => {
-    updateDoc(doc(db, `users/${sensei}`), {studentsId: arrayUnion(...apprenticesId)})
+    updateDoc(doc(db, `users/${senpai}`), {studentsId: arrayUnion(...apprenticesId)})
       .then(() => {
-        dispatch(updateStudentAsync(db, sensei));
+        dispatch(updateStudentAsync(db, senpai));
         if(callback) callback();
 
       })
@@ -197,7 +197,7 @@ export const pairingAppreniceSensei = (db: Firestore, sensei: string, apprentice
         console.log(e, "PAIRING ERROR")
       })
       apprenticesId.forEach(a => {
-        updateDoc(doc(db, `users/${a}`), {senseiId: sensei})
+        updateDoc(doc(db, `users/${a}`), {senpaiId: senpai})
       })
   }
 };

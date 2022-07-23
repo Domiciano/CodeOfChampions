@@ -24,7 +24,6 @@ const Home = () => {
         navigate("/login");
       }  
     }
-
     if(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)){
       console.log('TEACHER', loggedUser.isVerified);
       if(!loggedUser.isVerified){

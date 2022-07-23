@@ -66,3 +66,7 @@
   color: var(--main-white);
   font-size: var(--h4);  
 }
+
+.activity-state {
+  color: var(--second-white);
+}

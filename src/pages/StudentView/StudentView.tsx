@@ -5,7 +5,7 @@ import { StudentType } from "../../types/user";
 import StudentInfo from '../../components/StudentInfo/StudentInfo';
 import { useSelector, useDispatch } from "react-redux";
 import { InitialStateType } from '../../store/class-slice';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import Progress from '../../components/Progress/Progress';
 import MessageModal from '../../components/MessageModal/MessageModal';
 import Modal from '../../components/Modal/Modal';
 import MainBtn from '../../components/MainBtn/MainBtn';
@@ -14,8 +14,11 @@ import {deleteUserMessage} from '../../store/userAuth-slice';
 import SelectDropDown from '../../components/SelectDropDown/SelectDropDown';
 import { getStudentsFromClass } from '../../utils/firebase-functions/getStudentsFromClass';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
-import SenseiActions from '../../components/SenseiActions/SenseiActions';
-import { getSenseiStudents } from '../../utils/firebase-functions/getSenseiStudents';
+import SenpaiActions from '../../components/SenpaiActions/SenpaiActions';
+import { getSenpaiStudents } from '../../utils/firebase-functions/getSenpaiActionsStudents';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import Arrow from '../../components/UI/Arrow/Arrow';
+import { Link } from 'react-router-dom';
 
 interface StudentViewInterface {
   studentUser: StudentType
@@ -23,12 +26,13 @@ interface StudentViewInterface {
 
 const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses)[0];
-  const [currentTopicRanking, setCurrentTopicRanking] = useState('');
+  const [currentTopicRanking, setCurrentTopicRanking] = useState('General');
   const [classUsers, setClassUsers] = useState<StudentType[]>([]);
-  const [senseiStudents, setSenseiStudents] = useState<StudentType[]>([]);
+  const [senpaiStudents, setsenpaiStudents] = useState<StudentType[]>([]);
   const [activeMessages, setActiveMessages] = useState(studentUser.messages.length > 0);
   const dispatch = useDispatch();
   const selectDropdownRef = useRef<any>();
+  let position = 1
 
   const handleCloseMessageModal = () => {
     dispatch(deleteUserMessage(db, studentUser.id, studentUser.messages[0], () => {
@@ -37,19 +41,27 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   }
 
   const getUserTopicPoints = (user: StudentType, topic: string) =>{
-    return  user.classState.topics.find(t => t.name === topic)?.topicPoints;
+    if(topic === 'General') {
+      return  user?.classState?.points
+    }else {
+      return  user?.classState?.topics.find(t => t.name === topic)?.topicPoints;
+    }
   }
 
   const setUsersSortByTopic = useCallback((users: StudentType[], topic: string) => {
-    return users.sort((a, b) => {
-      const aPoints = getUserTopicPoints(a, topic);
-      const bPoints = getUserTopicPoints(b, topic);
-      if(aPoints !== undefined && bPoints !== undefined){
-        return bPoints - aPoints 
-      }else {
-        return 0
-      }
-    })
+    if(topic === 'General') {
+      return users.sort((a, b) => b.classState.points - a.classState.points)
+    }else{
+      return users.sort((a, b) => {
+        const aPoints = getUserTopicPoints(a, topic);
+        const bPoints = getUserTopicPoints(b, topic);
+        if(aPoints !== undefined && bPoints !== undefined){
+          return bPoints - aPoints 
+        }else {
+          return 0
+        }
+      })
+    }
   }, [])
 
   const handleSetTopicRanking = (topic: string) => {
@@ -57,21 +69,32 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
     setClassUsers(prev => setUsersSortByTopic(prev, topic));
     selectDropdownRef.current.close();
   }
-  console.log('xd');
+  
   useEffect(() => {
     if(!userClasses) return
-    setCurrentTopicRanking(userClasses.topics[0].name)
     getStudentsFromClass(db, userClasses.classId)
     .then(usersData => {
-      setClassUsers(setUsersSortByTopic(usersData.filter(user => user.profile.name === studentUser.profile.name), userClasses.topics[0].name));
+      setClassUsers(setUsersSortByTopic(usersData.filter(user => user.profile.name === studentUser.profile.name), 'General'));
     })
   }, [setUsersSortByTopic, studentUser.profile, userClasses]);
   useEffect(() => {
-    getSenseiStudents(db, studentUser.id)
+    getSenpaiStudents(db, studentUser.id)
       .then(usersData => {
-        setSenseiStudents(usersData);
+        setsenpaiStudents(usersData);
       })
   }, [studentUser])
+
+  const setRankingPosition = (classUsers: StudentType[], currentIndex: number, position: number) => {
+    if(currentIndex === 0){
+      return position
+    } else if(getUserTopicPoints(classUsers[currentIndex-1], currentTopicRanking) === getUserTopicPoints(classUsers[currentIndex], currentTopicRanking)) {
+      return position 
+    }else {
+      return position + 1
+    }
+  }
+
+  console.log('s')
   return (
     <div className={styles['student-view']}>
       { studentUser.messages.length > 0 && activeMessages &&(
@@ -87,59 +110,68 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
         name={studentUser.name} 
         profile={studentUser.profile.name}
         studentId={studentUser.universityId}
-        image={userClasses?.profiles?.find(p => p.name === studentUser.profile.name)?.img || ''}
+        image={userClasses?.profiles?.find(p => p.name.toLowerCase() === studentUser.profile.name.toLowerCase())?.img || ''}
       />
-      <ProgressBar student={studentUser}/>
-      {studentUser.profile.name !== 'Sensei' &&
+      {studentUser.profile.name !== 'senpai' && <Progress student={studentUser}/>}
+      {studentUser.profile.name !== 'senpai' &&
         <div className={styles['ranking-container']}>
-          <h3 className={styles['ranking-title']}>Ranking per Topic</h3>
+          <h3 className={styles['ranking-title']}>Ranking</h3>
           <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
             <div>
               { userClasses &&
-                userClasses.topics.map(topic => (
+                
+                ['General', ...userClasses?.topics.map(t => t.name)].map(topic => (
                   <p 
-                    key={topic.name}
+                    key={topic}
                     className={styles['profile']}
-                    onClick={handleSetTopicRanking.bind(null, topic.name)}
+                    onClick={handleSetTopicRanking.bind(null, topic)}
                   >
-                    {topic.name}
+                    {topic}
                   </p>
                 ))
               }
             </div>
           </SelectDropDown>
           <div className={styles['ranking-users']}>
+            
             {classUsers &&
-              classUsers.map((user, index) => (
-                <UserThumbNail 
-                  key={user.id} 
-                  rank={index + 1} 
-                  name={user.name} 
-                  studentId={user.universityId} 
-                  points={getUserTopicPoints(user, currentTopicRanking) || 0} 
-                  isTeacher={false}
-                  id={user.id}
-                />
-              ))
+              classUsers.map((user, index) => {
+                position = setRankingPosition(classUsers, index, position)
+                return (
+                  <UserThumbNail 
+                    key={user.id} 
+                    rank={position} 
+                    name={user.name} 
+                    studentId={user.universityId} 
+                    points={getUserTopicPoints(user, currentTopicRanking) || 0} 
+                    isTeacher={false}
+                    id={user.id}
+                  />
+                )
+              })
             }
           </div>
         </div>
       }
-      {studentUser.profile.name === 'Sensei' && userClasses && <SenseiActions userClass={userClasses} userId={studentUser.id}/>}
-      {studentUser.profile.name === 'Sensei' && studentUser.studentsId && (
-        <div className={styles['sensei-students']}>
-          <h3 className={styles['sensei-students__title']}>Apprentices</h3>
-          {senseiStudents.map((student, index) => (
-            <UserThumbNail 
-              key={student.id} 
-              rank={index + 1} 
-              name={student.name} 
-              studentId={student.universityId} 
-              points={student.classState.points} 
-              isTeacher={false}
-              id={student.id}
-              listItem={true}
-            />
+      {studentUser.profile.name === 'senpai' && userClasses && <SenpaiActions userClass={userClasses} userId={studentUser.id}/>}
+      {studentUser.profile.name === 'senpai' && studentUser.studentsId && (
+        <div className={styles['senpai-students']}>
+          <h3 className={styles['senpai-students__title']}>Apprentices</h3>
+          {senpaiStudents.sort((a, b) => b.classState.points - a.classState.points).map((student, index) => (
+            <Link
+              to={`/student-topics-detail/${student.id}`}
+              key={student.id}
+              className={styles['apprentice-container']}
+            >
+              <div className={styles['apprentice-info']}>
+                <div className={styles['apprentice-info__name']}>
+                  <h3>{student.name}</h3>
+                  <p>{student.classState.points}</p>
+                </div>
+                <Arrow right/>
+              </div>
+              <ProgressBar student={student}/>
+            </Link>
           ))}
         </div>
       )}

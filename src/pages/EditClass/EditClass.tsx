@@ -55,7 +55,7 @@ const EditClass = () => {
         const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
         let prevCopy = [...prev];
         console.log(prevCopy[topicIndex].activities[activityIndex].profileActivities)
-        prevCopy[topicIndex].activities[activityIndex].profileActivities.splice(0, 1);
+        prevCopy[topicIndex].activities[activityIndex].profileActivities.splice(profileActivityIndex, 1);
         return prevCopy;
       }
     })
