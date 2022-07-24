@@ -6,7 +6,6 @@ import {
 
 export const fetchAllUsers = async (db: Firestore, setUsersState: Function) => {      
   const students = query(collection(db, "users"), where("role", "==", "student"));
-  // const allUsers = collection(db, "users");
   getDocs(students)
     .then(querySnapshot => {
       querySnapshot.forEach((doc) => {

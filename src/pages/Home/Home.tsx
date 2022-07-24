@@ -7,6 +7,7 @@ import { userAuthInitStateType, logOutUser } from '../../store/userAuth-slice';
 import { getTeacherClasses, getStudentClass } from '../../store/class-slice';
 import TeacherView from '../TeacherView/TeacherView';
 import StudentView from '../../pages/StudentView/StudentView';
+import AdminView from '../AdminView/AdminView';
 
 const Home = () => {
   const loggedUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.user);
@@ -45,6 +46,9 @@ const Home = () => {
       }
       {(loggedUser?.role === 'student' && isStudentType(loggedUser)) &&
         <StudentView studentUser={loggedUser}/>
+      }
+      {(loggedUser?.role === 'admin' && isTeacherType(loggedUser)) &&
+        <AdminView/>
       }
     </div>
   )

@@ -4,6 +4,7 @@
   min-height: 100vh;
   position: relative;
   color: var(--main-black);
+  text-align: center;
 }
 
 .pending__info {
