@@ -77,6 +77,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
       setClassUsers(setUsersSortByTopic(usersData.filter(user => user.profile.name === studentUser.profile.name), 'General'));
     })
   }, [setUsersSortByTopic, studentUser.profile, userClasses]);
+  
   useEffect(() => {
     getSenpaiStudents(db, studentUser.id)
       .then(usersData => {
@@ -92,9 +93,8 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
     }else {
       return position + 1
     }
-  }
+  };
 
-  console.log('s')
   return (
     <div className={styles['student-view']}>
       { studentUser.messages.length > 0 && activeMessages &&(

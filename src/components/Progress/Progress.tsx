@@ -11,15 +11,15 @@ interface ProgressInterface {
 
 const Progress: React.FC<ProgressInterface> = ({ student }) => {
   return (
-    <Link to="/" className={styles['progress-bar']}>
+    <Link to={`/student-topics-detail/${student.id}`} className={styles['progress-bar']}>
       <div className={styles['header']}>
         <h3>Progress</h3>
       </div>
       <ProgressBar student={student}/>
-      {false && <div className={styles['footer']}>
+      <div className={styles['footer']}>
         <p>Detail</p>
         <Arrow right/>
-      </div>}
+      </div>
     </Link>
   )
 }
