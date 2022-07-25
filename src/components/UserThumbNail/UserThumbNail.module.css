@@ -48,10 +48,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--size2)
+  gap: var(--size2);
+  
 }
+
 .user-thumb__header h3{
   font-size: var(--h2);
+}
+
+.user-thumb__header p, .user-thumb__header b{
+  display: contents;
 }
 
 .user-thumb__footer {
@@ -62,4 +68,5 @@
 .user-thumb__footer p{
   font-size: var(--h2);
   color: var(--second-white);
+  
 }

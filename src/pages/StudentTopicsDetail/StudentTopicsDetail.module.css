@@ -29,6 +29,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--size2)
 }
 
 .activity div, p {
@@ -38,7 +39,7 @@
   width: 100%;
 }
 
-.form button{
+.submit {
   margin: var(--size5) 0;
 }
 
@@ -69,4 +70,54 @@
 
 .activity-state {
   color: var(--second-white);
+}
+
+.comments {
+  color: var(--second-white);
+  padding: var(--size2) var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2)
+}
+
+.comment-btn {
+  border: none;
+  background-color: var(--app-color);
+  padding: var(--size2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  
+}
+
+.comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment button{
+  border: none;
+  background: none;
+  height: fit-content;
+}
+
+.comment--edition {
+  max-width: 80%;
+}
+
+.add-comment-container {
+  padding: var(--size4) var(--size2) var(--size2) var(--size2);
+}
+
+.add-comment-container textarea {
+  width: 100%;
+  min-height: 100px;
+  border-radius: var(--border);
+  background: none;
+  color: var(--main-white);
+  font-size: var(--h2);
+  padding-left: .5em;
+  outline: none;
 }

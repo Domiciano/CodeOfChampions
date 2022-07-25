@@ -18,6 +18,7 @@ import SenpaiActions from '../../components/SenpaiActions/SenpaiActions';
 import { getSenpaiStudents } from '../../utils/firebase-functions/getSenpaiActionsStudents';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import Arrow from '../../components/UI/Arrow/Arrow';
+import LoaderLine from '../../components/LoaderLine/LoaderLine';
 import { Link } from 'react-router-dom';
 
 interface StudentViewInterface {
@@ -29,6 +30,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   const [currentTopicRanking, setCurrentTopicRanking] = useState('General');
   const [classUsers, setClassUsers] = useState<StudentType[]>([]);
   const [senpaiStudents, setsenpaiStudents] = useState<StudentType[]>([]);
+  const [loadingApprentices, setLoadingApprentices] = useState(false);
   const [activeMessages, setActiveMessages] = useState(studentUser.messages.length > 0);
   const dispatch = useDispatch();
   const selectDropdownRef = useRef<any>();
@@ -79,9 +81,11 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   }, [setUsersSortByTopic, studentUser.profile, userClasses]);
   
   useEffect(() => {
+    setLoadingApprentices(true);
     getSenpaiStudents(db, studentUser.id)
       .then(usersData => {
         setsenpaiStudents(usersData);
+        setLoadingApprentices(false);
       })
   }, [studentUser])
 
@@ -157,6 +161,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
       {studentUser.profile.name === 'senpai' && studentUser.studentsId && (
         <div className={styles['senpai-students']}>
           <h3 className={styles['senpai-students__title']}>Apprentices</h3>
+          {loadingApprentices && <LoaderLine/>}
           {senpaiStudents.sort((a, b) => b.classState.points - a.classState.points).map((student, index) => (
             <Link
               to={`/student-topics-detail/${student.id}`}

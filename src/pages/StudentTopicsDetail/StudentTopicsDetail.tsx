@@ -16,6 +16,10 @@ import { sendMessage } from '../../utils/firebase-functions/sendMessage';
 import { useSelector } from 'react-redux';
 import data from '../../data/profiles.json';
 import { InitialStateType } from '../../store/class-slice';
+import writeIcon from '../../img/svg/write.svg';
+import cancelIcon from '../../img/svg/cancel.svg';
+import Modal from '../../components/Modal/Modal';
+import Loader from '../../components/Loader/Loader';
 
 const activityStateOPtions: ActivityState[] = ["none", "complete", "almost"];
 
@@ -25,11 +29,19 @@ interface StudentTopicsDetailInterface {
 
 const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) => {
   const [currentUser, setCurrentUser] = useState<StudentType | null>();
+  const [showCommentModal, setShowCommentModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentReferenceToAddComment, setCurrentReferenceToAddComment] = useState({
+    topicIndex: 0,
+    activityIndex: 0
+  });
+  const [commentValue, setCommentValue] = useState('');
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const { userId } = useParams();
   const navigate = useNavigate();
   const activityStateRef = useRef<any>();
   const currentUserClass = userClasses.find(uc => uc.classId === currentUser?.belongedClassId);
+  
   const handleActivityState = (topicIndex: number, activityIndex: number, state: ActivityState) => {
     activityStateRef.current.close();
     setCurrentUser(prev => {
@@ -49,10 +61,27 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
       return copyPrev;
     })
   }
+
+  const openCommentModal = (topicIndex: number, activityIndex: number) => {
+    setShowCommentModal(true)
+    setCurrentReferenceToAddComment({
+      topicIndex: topicIndex,
+      activityIndex: activityIndex
+    })
+  }
+
+  const handleDeleteComment = (topicIndex: number, activityIndex: number, commentIndex: number) => {
+    setCurrentUser(prev => {
+      if(!prev) return;
+      const copyPrev = {...prev};
+      copyPrev.classState.topics[topicIndex].topicActivities[activityIndex].comments.splice(commentIndex, 1);
+      return copyPrev
+    })
+  }
   
   const handleUpdateStudent: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    // !BAD CODE
+    setIsLoading(true);
     if(!userId) return
     getCurrentUser(userId, db)
       .then(_currentUser => {
@@ -75,7 +104,8 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
           if(currentUser){
             updateStudentClassState(db, currentUser?.id, currentUser.classState, () => {
               //TODO: update the redux object regarding this class
-              navigate(`/class-detail/${currentUser?.belongedClassId}`)
+              navigate(`/class-detail/${currentUser?.belongedClassId}`);
+              setIsLoading(false);
             })
           }
         })
@@ -100,9 +130,35 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
         }
       })
   }, [navigate, userClasses.length, userId]);
+
+  const handleAddComment:React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    setShowCommentModal(false);
+    setCurrentUser(prev => {
+      if(!prev) return;
+      const copyPrev = {...prev};
+      copyPrev?.classState?.topics[currentReferenceToAddComment.topicIndex]?.topicActivities[currentReferenceToAddComment.activityIndex]?.comments.push(commentValue);
+      return copyPrev
+    })
+    setCommentValue('')
+  }
+
+  const onChangeTextarea:React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setCommentValue(e.target.value);
+  }
   
   return (
     <div className={styles['evaluate-student']}>
+      {isLoading && <Loader/>}
+      {showCommentModal && <Modal onCancelBtnAction={setShowCommentModal.bind(null, false)}>
+        <div className={styles['add-comment-container']}>
+          <textarea
+            value={commentValue}
+            onChange={onChangeTextarea}
+          />
+          <MainBtn text={'Add Comment'} action={handleAddComment}/>
+        </div>
+      </Modal>}
       <Back/>
       {
         currentUser && 
@@ -125,26 +181,54 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
               <div key={topic.name} className={styles['topic']}>
                 <h3>{topic.name}: {topic.topicPoints}</h3>
                 {topic.topicActivities.map((ta, taIndex) => {
-                  
                   const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
-                  
                   return (
-                    <div key={ta.id} className={styles['activity']}>
-                      <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
-                      {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
-                        {activityStateOPtions.map(activityState => (
-                          <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
+                    <article key={ta.id}>
+                      <div className={styles['activity']}>
+                        <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
+                        {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
+                          {activityStateOPtions.map(activityState => (
+                            <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
+                          ))}
+                        </SelectDropDown>}
+                        {editing && 
+                          <button
+                            type='button' 
+                            className={styles['comment-btn']}
+                            onClick={openCommentModal.bind(null, topicIndex, taIndex)}
+                          >
+                            <img src={writeIcon} alt="write" />
+                          </button>
+                        }
+                        {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
+                      </div>
+                      <ul className={styles['comments']}>
+                        {ta.comments?.map((comment, i) => (
+                          <div key={Math.random().toString()} className={styles['comment']}>
+                            <li className={`${editing ? styles['comment--edition'] : ''}`}>{comment}</li>
+                            {editing && 
+                              <button
+                                type='button'
+                                onClick={handleDeleteComment.bind(null, topicIndex, taIndex, i)}
+                              >
+                                <img src={cancelIcon} alt="" />
+                              </button>
+                            }
+                          </div>
                         ))}
-                      </SelectDropDown>}
-                      {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
-                    </div>
+                      </ul>
+                    </article>
                   )
                 })}
               </div>
             ))
           }
         </section>
-        {editing && <MainBtn text={'Update'} action={() => {}}/>}
+        {editing && 
+          <div className={styles['submit']}>
+            <MainBtn text={'Update'} action={() => {}}/>
+          </div>
+        }
       </form>
     </div>
   )

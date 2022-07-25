@@ -121,7 +121,8 @@ const SignUp = () => {
                   id: pa.activityId,
                   name: pa.name,
                   state: 'none',
-                  activityPodium: 'none'
+                  activityPodium: 'none',
+                  comments: []
                 })) || []
               }
             }else {
@@ -132,6 +133,7 @@ const SignUp = () => {
                   id: pa.activityId,
                   name: pa.name,
                   state: 'none',
+                  comments: []
                 })) || []
               }
             }

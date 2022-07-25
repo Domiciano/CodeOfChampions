@@ -13,6 +13,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import LogOut from '../../components/LogOut/LogOut';
+import LoaderLine from '../../components/LoaderLine/LoaderLine';
 
 const TestCompo = () => {
   const [modalActive, setModalActive] = useState(false);
@@ -21,34 +22,11 @@ const TestCompo = () => {
     killer: false,
     apprentice: false
   });
-  const [textInputs, setTextInputs] = useState([
-    {
-      value: 'holi',
-      id: 1
-    },
-    {
-      value: 'holi2',
-      id: 2
-    },
-    {
-      value: 'holi3',
-      id: 3
-    },
-  ])
+
   const selectDropdownRef = useRef<any>();
   return (
     <div className={styles.login}>
-      {
-        textInputs.map((t, i) => (
-          <input type="text" key={t.id} value={t.value} onChange={(e) => {
-            setTextInputs(prev => {
-              const copy = [...prev];
-              copy[i].value = e.target.value;
-              return copy
-            })
-          }}/>
-        ))
-      }
+      <LoaderLine/>
       <LogOut/>
       <MainBtn text="Login" action={() => {setModalActive(true)}}/>
       <div>

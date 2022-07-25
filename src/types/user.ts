@@ -35,6 +35,7 @@ export type StudentType = UserType & {
       topicActivities: {
         id: string,
         state: ActivityState,
+        comments: string[]
         activityPodium?: ActivityPodium
       }[]
     }[]

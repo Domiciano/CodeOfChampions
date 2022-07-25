@@ -14,7 +14,7 @@ export const setUserDataFromObj = (docData: DocumentData) => {
       universityId,
       messages,
       classState: docData.classState,
-      studentsId: docData.studentsId || []
+      studentsId: docData.studentsId || [],
     }
     return studentData
   }else{
