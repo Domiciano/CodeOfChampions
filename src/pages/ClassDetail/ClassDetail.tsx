@@ -9,10 +9,12 @@ import Back from '../../components/Back/Back';
 import styles from './ClassDetail.module.css';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
 import settingsIcon from '../../img/svg/settings.svg';
+import Loader from '../../components/Loader/Loader';
 
 const ClassDetail = () => {
   const navigate = useNavigate();
   const { classId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const currentClass = userClasses.find(c => c.classId === classId);
   const [classUsers, setClassUsers] = useState<StudentType[]>([]);
@@ -27,12 +29,14 @@ const ClassDetail = () => {
   }, [classUsers])
 
   useEffect(() => {
+    setIsLoading(true);
     if (!currentClass){
       navigate('/');
       return
     }
     getStudentsFromClass(db, currentClass.classId)
     .then(usersData => {
+      setIsLoading(false);
       setClassUsers(usersData);
     })
     setSelectedProfileFilter(currentClass.profiles[0].name);
@@ -45,6 +49,7 @@ const ClassDetail = () => {
 
   return (
     <div className={styles['class-detail']}>
+      {isLoading && <Loader/>}
       <header className={styles['class-detail__header']}>
         <Back route="/" />
         <button onClick={() => {

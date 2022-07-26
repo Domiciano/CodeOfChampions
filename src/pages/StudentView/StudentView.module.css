@@ -75,3 +75,7 @@
 .apprentice-container:link{
   text-decoration: none
 }
+
+.apprentice-info__name p {
+  display: contents;
+}

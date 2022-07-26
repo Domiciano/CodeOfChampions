@@ -113,6 +113,7 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
   }
 
   useEffect(() => {
+    setIsLoading(true);
     if(!userId) return
     if(userClasses.length === 0){
       navigate('/');
@@ -125,6 +126,7 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
         }else{
           const studentData = setUserDataFromObj(currentUserData);
           if(isStudentType(studentData)){
+            setIsLoading(false);
             setCurrentUser(studentData);
           }
         }
