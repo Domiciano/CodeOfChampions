@@ -54,6 +54,10 @@
   display: block
 }
 
+.class-detail__title{
+  color: var(--main-white);
+}
+
 .class-detail__ranking-select {
   display: flex;
   flex-direction: column;

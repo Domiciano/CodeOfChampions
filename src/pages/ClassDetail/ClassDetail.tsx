@@ -79,6 +79,7 @@ const ClassDetail = () => {
           <img src={settingsIcon} alt="settings" />
         </button>
       </header>
+      <h3 className={styles['class-detail__title']}>Class: {currentClass?.schedule}</h3>
       <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
         <div className={styles['class-detail__ranking-select']}>
           { currentClass &&

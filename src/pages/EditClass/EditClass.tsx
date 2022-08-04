@@ -144,7 +144,7 @@ const EditClass = () => {
       </header>
       <div className={styles['edit-class']}>
         <h1>Settings</h1>
-        <div>
+        <section className={styles['edit-class__section']}>
           <h2>Class State</h2>
           <p>Edit the current status of the class wether the semester already has finished.</p>
           <div className={styles['set-active-state']}>
@@ -153,17 +153,21 @@ const EditClass = () => {
               {classIsActive !== null && <CheckBox isActive={classIsActive}/>}
             </button>
           </div>
-        </div>
+        </section>
         {isLoading && <LoaderLine/>}
         {topics && 
-          <EditTopics 
-            topics={topics} 
-            addNewActivity={addNewActivity} 
-            handleChangeActivityName={handleChangeActivityName} 
-            levelDifficultySelectDropdownRef={levelDifficultySelectDropdownRef} 
-            handleSetDifficulty={handleSetDifficulty} 
-            handleDeleteActivity={handleDeleteActivity} 
-          />
+          <section className={styles['edit-class__section']}>
+            <h2>Edit Class Topics Activities</h2>
+            <p>Add, delete or modify the topics activities</p>
+            <EditTopics 
+              topics={topics} 
+              addNewActivity={addNewActivity} 
+              handleChangeActivityName={handleChangeActivityName} 
+              levelDifficultySelectDropdownRef={levelDifficultySelectDropdownRef} 
+              handleSetDifficulty={handleSetDifficulty} 
+              handleDeleteActivity={handleDeleteActivity} 
+            />
+          </section>
         }
       </div>
     </>
