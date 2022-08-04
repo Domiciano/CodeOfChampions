@@ -18,10 +18,12 @@ import SelectProfiles from '../../components/SelectProfiles/SelectProfiles';
 import { ProfileDataSelect, SelectClassType } from '../../types/classes';
 import ErrorMsg from '../../components/ErrorMsg/ErrorMsg';
 import { initState } from './signUp-utils';
+import Loader from '../../components/Loader/Loader';
 
 
 const SignUp = () => {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const role = new URLSearchParams(location.search).get('role');
   const navigate = useNavigate();
   const activeClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.classesToSelect);
@@ -67,6 +69,7 @@ const SignUp = () => {
   // * SUBMIT >>>>>>
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     let userToPublish: StudentType | TeacherType;
     let allowPublish = true;
     Object.keys(inputValues).forEach((v) => {
@@ -153,15 +156,20 @@ const SignUp = () => {
         }else{
           navigate('/');
         }
+        setIsLoading(false);
       }, email.content, password.content, (error) => {
         console.log(error.code)
         setFirebaseError(error.message);
+        setIsLoading(false);
       }));
+    }else {
+      setIsLoading(false);
     }
   }
 
   return (
     <div className={styles['sign-up']}>
+      {isLoading && <Loader/>}
       <div className={styles['sign-up__header']}>
         <Back/>
         <h1>Sign up, {role}</h1>

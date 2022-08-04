@@ -1,5 +1,8 @@
 .evaluate-student {
   padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3)
 }
 
 .topics {
@@ -120,4 +123,22 @@
   font-size: var(--h2);
   padding-left: .5em;
   outline: none;
+}
+
+.evaluate-student__header {
+  display: flex;
+  justify-content: space-between;
+  background: var(--main-black);
+  padding: var(--size3);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 2px solid var(--second-black);
+}
+
+.evaluate-student__header > :nth-child(1), .evaluate-student__header > :nth-child(2) {
+  width: fit-content;
+}
+.evaluate-student__header > :nth-child(2) {
+  padding: var(--size1) var(--size2);
 }

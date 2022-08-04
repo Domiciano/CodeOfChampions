@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InitialStateType } from '../../store/class-slice';
@@ -10,23 +10,44 @@ import styles from './ClassDetail.module.css';
 import UserThumbNail from '../../components/UserThumbNail/UserThumbNail';
 import settingsIcon from '../../img/svg/settings.svg';
 import Loader from '../../components/Loader/Loader';
+import SelectDropDown from '../../components/SelectDropDown/SelectDropDown';
+import {setUsersSortByTopic, getUserTopicPoints} from '../../utils/handleSortByTopic';
 
 const ClassDetail = () => {
   const navigate = useNavigate();
   const { classId } = useParams();
+  const [currentTopicRanking, setCurrentTopicRanking] = useState('General');
   const [isLoading, setIsLoading] = useState(false);
   const userClasses = useSelector((state: {classSlice: InitialStateType}) => state?.classSlice.userClasses);
   const currentClass = userClasses.find(c => c.classId === classId);
   const [classUsers, setClassUsers] = useState<StudentType[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<StudentType[]>([]);
   const [selectedProfileFilter, setSelectedProfileFilter] = useState('');
+  const selectDropdownRef = useRef<any>();
+  let position = 1
+
+  const setRankingPosition = (classUsers: StudentType[], currentIndex: number, position: number) => {
+    if(currentIndex === 0){
+      return position
+    } else if(getUserTopicPoints(classUsers[currentIndex-1], currentTopicRanking) === getUserTopicPoints(classUsers[currentIndex], currentTopicRanking)) {
+      return position 
+    }else {
+      return position + 1
+    }
+  };
 
   const filterStudentsByProfile = useCallback((profile: string) => {
     setFilteredUsers(classUsers.filter(u => {
       return u.profile.name.toLowerCase() === profile.toLowerCase()
     }).sort((a,b) => b.classState.points - a.classState.points))
     setSelectedProfileFilter(profile);
-  }, [classUsers])
+  }, [classUsers]);
+
+  const handleSetTopicRanking = (topic: string) => {
+    setCurrentTopicRanking(topic);
+    setFilteredUsers(prev => setUsersSortByTopic(prev, topic));
+    selectDropdownRef.current.close();
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,6 +79,21 @@ const ClassDetail = () => {
           <img src={settingsIcon} alt="settings" />
         </button>
       </header>
+      <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
+        <div className={styles['class-detail__ranking-select']}>
+          { currentClass &&
+            ['General', ...currentClass?.topics.map(t => t.name)].map(topic => (
+              <p 
+                key={topic}
+                className={styles['profile']}
+                onClick={handleSetTopicRanking.bind(null, topic)}
+              >
+                {topic}
+              </p>
+            ))
+          }
+        </div>
+      </SelectDropDown>
       <article className={styles['class-detail__filter-actions']}>
         {currentClass?.profiles.map(profile => (
           <button
@@ -70,17 +106,20 @@ const ClassDetail = () => {
         ))}
       </article>
       <div className={styles['class-detail__students']}>
-        {filteredUsers.map((user, index) => (
-          <UserThumbNail 
+        {filteredUsers.map((user, index) => {
+          position = setRankingPosition(filteredUsers, index, position)
+          return <UserThumbNail 
             key={user.id} 
-            rank={index + 1} 
+            rank={position} 
             name={user.name} 
             studentId={user.universityId} 
-            points={user.classState.points} 
+            points={getUserTopicPoints(user, currentTopicRanking) || 0}
             isTeacher 
             id={user.id}
+            user={user}
           />
-        ))}
+        }
+        )}
       </div>
     </div>
   )

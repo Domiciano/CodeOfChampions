@@ -7,6 +7,7 @@ import LogOut from '../../components/LogOut/LogOut';
 import plusIcon from '../../img/svg/plus.svg';
 import ClassThumbNail from '../../components/ClassThumbNail/ClassThumbNail';
 import { InitialStateType } from '../../store/class-slice';
+import LoaderLine from '../../components/LoaderLine/LoaderLine';
 
 interface TeacherViewInterface {
   teacherUser: TeacherType
@@ -32,6 +33,7 @@ const TeacherView: React.FC<TeacherViewInterface> = ({teacherUser}) => {
         </div>
       </header>
       <article className={styles['teacher-view__classes']}>
+        {!userClasses && <LoaderLine/>}
         {
           userClasses.length > 0 &&
           userClasses.map( currentClass => (

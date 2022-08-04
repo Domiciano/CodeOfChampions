@@ -2,7 +2,12 @@
   padding: var(--size3);
   display: flex;
   flex-direction: column;
-  gap: var(--size4)
+  gap: var(--size3)
+}
+
+.edit-class h1 {
+  font-size: var(--h5);
+  color: var(--second-white);
 }
 
 .set-active-state {
@@ -15,4 +20,22 @@
 .set-active-state button {
   border: none;
   background: none;
+}
+
+.edit-class__header {
+  display: flex;
+  justify-content: space-between;
+  background: var(--main-black);
+  padding: var(--size3);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 2px solid var(--second-black);
+}
+
+.edit-class__header > :nth-child(1), .edit-class__header > :nth-child(2) {
+  width: fit-content;
+}
+.edit-class__header > :nth-child(2) {
+  padding: var(--size1) var(--size2);
 }

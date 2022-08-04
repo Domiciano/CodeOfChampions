@@ -13,6 +13,7 @@ import { getClassByID } from '../../utils/firebase-functions/getClassByID';
 import { updateClassActiveState } from '../../utils/firebase-functions/updateClassActiveState';
 import CheckBox from '../../components/CheckBox/CheckBox';
 import uniqid from 'uniqid';
+import LoaderLine from '../../components/LoaderLine/LoaderLine';
 import { logOutUser, userAuthInitStateType } from '../../store/userAuth-slice';
 import { isTeacherType } from '../../types/user';
 
@@ -24,6 +25,7 @@ const EditClass = () => {
   const isFetchingCurrentUser = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isFetchingCurrentUser);
   const isLoggedIn = useSelector((state: {userAuth: userAuthInitStateType}) => state?.userAuth.isLoggedIn);
   const [topics, setTopics] = useState<TopicDataType[] | null>();
+  const [isLoading, setIsLoading] = useState(false);
   const [classIsActive, setClassIsActive] = useState<boolean | null>(null);
   const levelDifficultySelectDropdownRef = useRef<any>();
   const dispatch = useDispatch();
@@ -101,13 +103,15 @@ const EditClass = () => {
   }
   
   useEffect(() => {
+    setIsLoading(true);
     if(!classId) return
     getClassByID(classId, db)
       .then((doc) => {
         const dataInfo = doc.data();
         if(dataInfo){
-          setTopics(dataInfo.topics)
+          setTopics(dataInfo.topics);
           setClassIsActive(dataInfo.isActive);
+          setIsLoading(false);
         }
       })
   }, [classId]);
@@ -133,26 +137,36 @@ const EditClass = () => {
     }
   }, [dispatch, isFetchingCurrentUser, isLoggedIn, loggedUser, navigate]);
   return (
-    <div className={styles['edit-class']}>
-      <Back/>
-      <div className={styles['set-active-state']}>
-        <h4>Class Active State</h4>
-        <button onClick={handleClassActiveState}>
-          {classIsActive !== null && <CheckBox isActive={classIsActive}/>}
-        </button>
+    <>
+      <header className={styles['edit-class__header']}>
+        <Back/>
+        <MainBtn text={'Update Class'} action={handleButtonClick}/>
+      </header>
+      <div className={styles['edit-class']}>
+        <h1>Settings</h1>
+        <div>
+          <h2>Class State</h2>
+          <p>Edit the current status of the class wether the semester already has finished.</p>
+          <div className={styles['set-active-state']}>
+            <h4>Class Active State</h4>
+            <button onClick={handleClassActiveState}>
+              {classIsActive !== null && <CheckBox isActive={classIsActive}/>}
+            </button>
+          </div>
+        </div>
+        {isLoading && <LoaderLine/>}
+        {topics && 
+          <EditTopics 
+            topics={topics} 
+            addNewActivity={addNewActivity} 
+            handleChangeActivityName={handleChangeActivityName} 
+            levelDifficultySelectDropdownRef={levelDifficultySelectDropdownRef} 
+            handleSetDifficulty={handleSetDifficulty} 
+            handleDeleteActivity={handleDeleteActivity} 
+          />
+        }
       </div>
-      {topics && 
-        <EditTopics 
-          topics={topics} 
-          addNewActivity={addNewActivity} 
-          handleChangeActivityName={handleChangeActivityName} 
-          levelDifficultySelectDropdownRef={levelDifficultySelectDropdownRef} 
-          handleSetDifficulty={handleSetDifficulty} 
-          handleDeleteActivity={handleDeleteActivity} 
-        />
-      }
-      <MainBtn text={'Update Class'} action={handleButtonClick}/>
-    </div>
+    </>
   )
 }
 

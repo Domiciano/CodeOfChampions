@@ -79,8 +79,7 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
     })
   }
   
-  const handleUpdateStudent: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
+  const handleUpdateStudent = () => {
     setIsLoading(true);
     if(!userId) return
     getCurrentUser(userId, db)
@@ -150,89 +149,90 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
   }
   
   return (
-    <div className={styles['evaluate-student']}>
-      {isLoading && <Loader/>}
-      {showCommentModal && <Modal onCancelBtnAction={setShowCommentModal.bind(null, false)}>
-        <div className={styles['add-comment-container']}>
-          <textarea
-            value={commentValue}
-            onChange={onChangeTextarea}
-          />
-          <MainBtn text={'Add Comment'} action={handleAddComment}/>
-        </div>
-      </Modal>}
-      <Back/>
-      {
-        currentUser && 
-        <StudentInfo 
-          name={currentUser?.name} 
-          profile={currentUser?.profile.name} 
-          studentId={currentUser?.universityId}
-          image={currentUserClass?.profiles.find(p => p.name.toLowerCase() === currentUser.profile.name.toLowerCase())?.img || ''}
-        />
-      }
-      <form className={styles['form']} onSubmit={handleUpdateStudent}>
-        <header className={styles['form__header']}>
-          <h2>Topics</h2>
-          <h3>Points: {currentUser?.classState.points}</h3>
-        </header>
-        <section className={styles['topics']}>
-          {
-            currentUser && currentUser.profile.name !== 'senpai' && 
-            currentUser.classState.topics.map((topic, topicIndex) => (
-              <div key={topic.name} className={styles['topic']}>
-                <h3>{topic.name}: {topic.topicPoints}</h3>
-                {topic.topicActivities.map((ta, taIndex) => {
-                  const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
-                  return (
-                    <article key={ta.id}>
-                      <div className={styles['activity']}>
-                        <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
-                        {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
-                          {activityStateOPtions.map(activityState => (
-                            <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
-                          ))}
-                        </SelectDropDown>}
-                        {editing && 
-                          <button
-                            type='button' 
-                            className={styles['comment-btn']}
-                            onClick={openCommentModal.bind(null, topicIndex, taIndex)}
-                          >
-                            <img src={writeIcon} alt="write" />
-                          </button>
-                        }
-                        {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
-                      </div>
-                      <ul className={styles['comments']}>
-                        {ta.comments?.map((comment, i) => (
-                          <div key={Math.random().toString()} className={styles['comment']}>
-                            <li className={`${editing ? styles['comment--edition'] : ''}`}>{comment}</li>
-                            {editing && 
-                              <button
-                                type='button'
-                                onClick={handleDeleteComment.bind(null, topicIndex, taIndex, i)}
-                              >
-                                <img src={cancelIcon} alt="" />
-                              </button>
-                            }
-                          </div>
-                        ))}
-                      </ul>
-                    </article>
-                  )
-                })}
-              </div>
-            ))
-          }
-        </section>
-        {editing && 
-          <div className={styles['submit']}>
-            <MainBtn text={'Update'} action={() => {}}/>
+    <>
+      <header className={styles['evaluate-student__header']}>
+        <Back/>
+        {editing && <MainBtn text={'Update'} action={handleUpdateStudent}/>}
+      </header>
+      <div className={styles['evaluate-student']}>
+        {isLoading && <Loader/>}
+        {showCommentModal && <Modal onCancelBtnAction={setShowCommentModal.bind(null, false)}>
+          <div className={styles['add-comment-container']}>
+            <textarea
+              value={commentValue}
+              onChange={onChangeTextarea}
+            />
+            <MainBtn text={'Add Comment'} action={handleAddComment}/>
           </div>
+        </Modal>}
+        
+        {
+          currentUser && 
+          <StudentInfo 
+            name={currentUser?.name} 
+            profile={currentUser?.profile.name} 
+            studentId={currentUser?.universityId}
+            image={currentUserClass?.profiles.find(p => p.name.toLowerCase() === currentUser.profile.name.toLowerCase())?.img || ''}
+          />
         }
-      </form>
-    </div>
+        <form className={styles['form']} onSubmit={handleUpdateStudent}>
+          <header className={styles['form__header']}>
+            <h2>Topics</h2>
+            <h3>Points: {currentUser?.classState.points}</h3>
+          </header>
+          <section className={styles['topics']}>
+            {
+              currentUser && currentUser.profile.name !== 'senpai' && 
+              currentUser.classState.topics.map((topic, topicIndex) => (
+                <div key={topic.name} className={styles['topic']}>
+                  <h3>{topic.name}: {topic.topicPoints}</h3>
+                  {topic.topicActivities.map((ta, taIndex) => {
+                    const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
+                    return (
+                      <article key={ta.id}>
+                        <div className={styles['activity']}>
+                          <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
+                          {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
+                            {activityStateOPtions.map(activityState => (
+                              <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
+                            ))}
+                          </SelectDropDown>}
+                          {editing && 
+                            <button
+                              type='button' 
+                              className={styles['comment-btn']}
+                              onClick={openCommentModal.bind(null, topicIndex, taIndex)}
+                            >
+                              <img src={writeIcon} alt="write" />
+                            </button>
+                          }
+                          {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
+                        </div>
+                        <ul className={styles['comments']}>
+                          {ta.comments?.map((comment, i) => (
+                            <div key={Math.random().toString()} className={styles['comment']}>
+                              <li className={`${editing ? styles['comment--edition'] : ''}`}>{comment}</li>
+                              {editing && 
+                                <button
+                                  type='button'
+                                  onClick={handleDeleteComment.bind(null, topicIndex, taIndex, i)}
+                                >
+                                  <img src={cancelIcon} alt="" />
+                                </button>
+                              }
+                            </div>
+                          ))}
+                        </ul>
+                      </article>
+                    )
+                  })}
+                </div>
+              ))
+            }
+          </section>
+        </form>
+      </div>
+    </>
   )
 }
 

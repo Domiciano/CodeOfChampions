@@ -56,6 +56,7 @@ const AdminView = () => {
               className={styles['check-btn']}
               onClick={hanldeToggleTeacherState.bind(null, tIndex)}
             >
+              <p>Verify</p>
               <CheckBox isActive={t.isVerified}/>
             </button>
           </div>

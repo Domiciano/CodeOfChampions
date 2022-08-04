@@ -24,6 +24,7 @@
   font-size: var(--h2);
   color: var(--second-white);
   font-weight: 500;
+  text-transform:capitalize;
 }
 
 .selected {
@@ -51,4 +52,20 @@
 }
 .class-detail__header button img {
   display: block
+}
+
+.class-detail__ranking-select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+  color: var(--second-white);
+  padding: var(--size2) 0;
+}
+.class-detail__ranking-select > * {
+  padding: 0 var(--size2);
+  border-bottom: 2px solid var(--second-black);
+}
+
+.class-detail__ranking-select p:last-child {
+  border-bottom: none;
 }

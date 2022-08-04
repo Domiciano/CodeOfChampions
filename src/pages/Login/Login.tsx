@@ -14,10 +14,12 @@ import Modal from '../../components/Modal/Modal';
 import Arrow from '../../components/UI/Arrow/Arrow';
 import sistemasLogo from '../../img/sistemas.png';
 import appLogo from '../../img/svg/logo.svg';
+import Loader from '../../components/Loader/Loader';
 
 
 const Login = () => {
   const [modalActive, setModalActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -35,8 +37,10 @@ const Login = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     console.log(email, password);
     dispatch(logUserAsync(auth, db, email, password, () =>{
+      setIsLoading(false);
       navigate('/');
     }, (errorCode, errorMessage) => {
       console.log(errorCode, errorMessage);
@@ -45,6 +49,7 @@ const Login = () => {
   }
   return (
     <div className={styles.login}>
+      {isLoading && <Loader/>}
       {modalActive && <Modal onCancelBtnAction={ () => {setModalActive(false)}}>
         <h3 className={styles['modal-header']}>Who are you?</h3>
         <div className={styles['roles']}>

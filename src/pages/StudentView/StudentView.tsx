@@ -20,6 +20,7 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import Arrow from '../../components/UI/Arrow/Arrow';
 import LoaderLine from '../../components/LoaderLine/LoaderLine';
 import { Link } from 'react-router-dom';
+import {setUsersSortByTopic, getUserTopicPoints} from '../../utils/handleSortByTopic';
 
 interface StudentViewInterface {
   studentUser: StudentType
@@ -31,54 +32,35 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
   const [classUsers, setClassUsers] = useState<StudentType[]>([]);
   const [senpaiStudents, setsenpaiStudents] = useState<StudentType[]>([]);
   const [loadingApprentices, setLoadingApprentices] = useState(false);
+  const [loadingRankings, setLoadingRankings] = useState(false);
   const [activeMessages, setActiveMessages] = useState(studentUser.messages.length > 0);
   const dispatch = useDispatch();
   const selectDropdownRef = useRef<any>();
   let position = 1
-
+  
   const handleCloseMessageModal = () => {
     dispatch(deleteUserMessage(db, studentUser.id, studentUser.messages[0], () => {
       setActiveMessages(false);
     }))
   }
 
-  const getUserTopicPoints = (user: StudentType, topic: string) =>{
-    if(topic === 'General') {
-      return  user?.classState?.points
-    }else {
-      return  user?.classState?.topics.find(t => t.name === topic)?.topicPoints;
-    }
-  }
-
-  const setUsersSortByTopic = useCallback((users: StudentType[], topic: string) => {
-    if(topic === 'General') {
-      return users.sort((a, b) => b.classState.points - a.classState.points)
-    }else{
-      return users.sort((a, b) => {
-        const aPoints = getUserTopicPoints(a, topic);
-        const bPoints = getUserTopicPoints(b, topic);
-        if(aPoints !== undefined && bPoints !== undefined){
-          return bPoints - aPoints 
-        }else {
-          return 0
-        }
-      })
-    }
-  }, [])
-
   const handleSetTopicRanking = (topic: string) => {
+    setLoadingRankings(true);
     setCurrentTopicRanking(topic);
     setClassUsers(prev => setUsersSortByTopic(prev, topic));
     selectDropdownRef.current.close();
+    setLoadingRankings(false);
   }
   
   useEffect(() => {
     if(!userClasses) return
+    setLoadingRankings(true);
     getStudentsFromClass(db, userClasses.classId)
     .then(usersData => {
+      setLoadingRankings(false);
       setClassUsers(setUsersSortByTopic(usersData.filter(user => user.profile.name === studentUser.profile.name), 'General'));
     })
-  }, [setUsersSortByTopic, studentUser.profile, userClasses]);
+  }, [studentUser.profile, userClasses]);
   
   useEffect(() => {
     setLoadingApprentices(true);
@@ -123,7 +105,6 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
           <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
             <div>
               { userClasses &&
-                
                 ['General', ...userClasses?.topics.map(t => t.name)].map(topic => (
                   <p 
                     key={topic}
@@ -137,7 +118,7 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
             </div>
           </SelectDropDown>
           <div className={styles['ranking-users']}>
-            
+            {loadingRankings && <LoaderLine/>}
             {classUsers &&
               classUsers.map((user, index) => {
                 position = setRankingPosition(classUsers, index, position)

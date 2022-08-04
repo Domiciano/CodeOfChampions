@@ -39,6 +39,7 @@
 .profile aside h3 {
   color: var(--main-white);
   font-size: var(--h2);
+  text-transform:capitalize;
 }
 
 .profile aside p {

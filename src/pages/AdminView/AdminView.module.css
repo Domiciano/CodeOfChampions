@@ -23,4 +23,15 @@
 .check-btn {
   background: none;
   border: none;
+  display: flex;
+  height: fit-content;
+  align-self: center;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.check-btn p {
+  display: contents;
+  font-weight: bold;
+  color: var(--main-white);
 }
