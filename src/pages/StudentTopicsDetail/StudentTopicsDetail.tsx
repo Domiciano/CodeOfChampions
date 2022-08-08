@@ -20,6 +20,7 @@ import writeIcon from '../../img/svg/write.svg';
 import cancelIcon from '../../img/svg/cancel.svg';
 import Modal from '../../components/Modal/Modal';
 import Loader from '../../components/Loader/Loader';
+import Difficulty from '../../components/Difficulty/Difficulty';
 
 const activityStateOPtions: ActivityState[] = ["none", "complete", "almost"];
 
@@ -187,11 +188,11 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
                 <div key={topic.name} className={styles['topic']}>
                   <h3>{topic.name}: {topic.topicPoints}</h3>
                   {topic.topicActivities.map((ta, taIndex) => {
-                    const activityName = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id)?.name;
+                    const activityClassData = currentUserClass?.topics.find(t => t.name === topic.name)?.activities.find(a => a.profile === currentUser?.profile.name)?.profileActivities.find(pa => pa.activityId === ta.id);
                     return (
-                      <article key={ta.id}>
+                      <article key={ta.id} className={styles['activity-container']}>
                         <div className={styles['activity']}>
-                          <p className={styles['activity-tag']}>{taIndex+1} {activityName}</p>
+                          <p className={styles['activity-tag']}>{taIndex+1} {activityClassData?.name}</p>
                           {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
                             {activityStateOPtions.map(activityState => (
                               <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
@@ -207,6 +208,10 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
                             </button>
                           }
                           {!editing && <h4 className={styles['activity-state']}>{ta.state}</h4>}
+                        </div>
+                        <div className={styles['activity-difficulty']}>
+                          <p>Difficulty</p>
+                          <Difficulty difficulty={activityClassData?.difficulty || 'easy'}/>
                         </div>
                         <ul className={styles['comments']}>
                           {ta.comments?.map((comment, i) => (

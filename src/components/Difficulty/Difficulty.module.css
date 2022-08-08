@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  gap: var(--size2);
+}
+
+.container > * {
+  width: 15px;
+}
