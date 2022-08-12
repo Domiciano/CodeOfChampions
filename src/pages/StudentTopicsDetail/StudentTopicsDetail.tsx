@@ -21,6 +21,7 @@ import cancelIcon from '../../img/svg/cancel.svg';
 import Modal from '../../components/Modal/Modal';
 import Loader from '../../components/Loader/Loader';
 import Difficulty from '../../components/Difficulty/Difficulty';
+import { updateSenpai } from '../../utils/firebase-functions/updateSenpai';
 
 const activityStateOPtions: ActivityState[] = ["none", "complete", "almost"];
 
@@ -101,14 +102,28 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
               id: uniqid()
             })
           }
-          if(currentUser){
-            updateStudentClassState(db, currentUser?.id, currentUser.classState, () => {
+        })
+        if(currentUser){
+          updateStudentClassState(db, currentUser?.id, currentUser.classState, () => {
+            if(studentData.profile.name.toLocaleLowerCase() === "apprentice"){
+              if(studentData.senpaiId && studentData.senpaiId !== ''){
+                console.log(studentData, 'AAAA')
+                updateSenpai(db, studentData.senpaiId)
+                  .then(() => {
+                    navigate(`/class-detail/${currentUser?.belongedClassId}`);
+                    setIsLoading(false);
+                  })
+              }else{
+                navigate(`/class-detail/${currentUser?.belongedClassId}`);
+                setIsLoading(false);
+              }
+            }else{
               //TODO: update the redux object regarding this class
               navigate(`/class-detail/${currentUser?.belongedClassId}`);
               setIsLoading(false);
-            })
-          }
-        })
+            }
+          })
+        }
       })
   }
 
@@ -192,7 +207,14 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
                     return (
                       <article key={ta.id} className={styles['activity-container']}>
                         <div className={styles['activity']}>
-                          <p className={styles['activity-tag']}>{taIndex+1} {activityClassData?.name}</p>
+                          <p 
+                            className={styles['activity-tag']} 
+                            style={{
+                              color: ta.state === "complete" ?  "var(--app-color)" : "",
+                            }}
+                          >
+                            {taIndex+1} {activityClassData?.name}
+                          </p>
                           {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
                             {activityStateOPtions.map(activityState => (
                               <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>

@@ -101,6 +101,9 @@ const ClassDetail = () => {
             className={selectedProfileFilter === profile.name ? styles['selected'] : ''}
             key={profile.name}
             onClick={filterStudentsByProfile.bind(null, profile.name)}
+            style={{
+              color: `var(--${profile.name.toLowerCase()}-color)`
+            }}
           >
               {profile.name}
             </button>

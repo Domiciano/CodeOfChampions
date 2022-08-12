@@ -23,6 +23,7 @@ import { setUserDataFromObj } from "../utils/firebase-functions/setUserDataFromO
 import { isStudentType } from "../types/user";
 import data from "../data/profiles.json";
 import { updateStudentAsync } from "./userAuth-slice";
+import { updateSenpai } from "../utils/firebase-functions/updateSenpai";
 
 export type InitialStateType = {
   userClasses: ClassType[];
@@ -278,8 +279,11 @@ export const pairingApprenicesenpai = (
       studentsId: arrayUnion(...apprenticesId),
     })
       .then(() => {
-        dispatch(updateStudentAsync(db, senpai));
-        if (callback) callback();
+        updateSenpai(db, senpai)
+        .then(() => {
+          dispatch(updateStudentAsync(db, senpai));
+          if (callback) callback();
+          })
       })
       .catch((e) => {
         console.log(e, "PAIRING ERROR");

@@ -31,6 +31,9 @@ code {
   --apprentice: linear-gradient(0deg, rgba(5, 117, 230, 1) 0%, rgba(2, 27, 121, 1) 100%);
   --killer: linear-gradient(0deg, rgba(255,137,116,1) 0%, rgba(190,45,31,1) 100%);
   --senpai: linear-gradient(0deg, rgba(160,68,255,1) 0%, rgba(84,27,125,1) 100%);
+  --apprentice-color:rgba(5, 117, 230, 1) ;
+  --killer-color:rgba(255,137,116,1) ;
+  --senpai-color:rgba(160,68,255,1) ;
   --first-rank: #EDB942;
   --second-rank: #857F92;
   --third-rank: #F4B887;

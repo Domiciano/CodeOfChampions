@@ -99,46 +99,8 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
         image={userClasses?.profiles?.find(p => p.name.toLowerCase() === studentUser.profile.name.toLowerCase())?.img || ''}
       />
       {studentUser.profile.name !== 'senpai' && <Progress student={studentUser}/>}
-      {studentUser.profile.name !== 'senpai' &&
-        <div className={styles['ranking-container']}>
-          <h3 className={styles['ranking-title']}>Ranking</h3>
-          <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
-            <div>
-              { userClasses &&
-                ['General', ...userClasses?.topics.map(t => t.name)].map(topic => (
-                  <p 
-                    key={topic}
-                    className={styles['profile']}
-                    onClick={handleSetTopicRanking.bind(null, topic)}
-                  >
-                    {topic}
-                  </p>
-                ))
-              }
-            </div>
-          </SelectDropDown>
-          <div className={styles['ranking-users']}>
-            {loadingRankings && <LoaderLine/>}
-            {classUsers &&
-              classUsers.map((user, index) => {
-                position = setRankingPosition(classUsers, index, position)
-                return (
-                  <UserThumbNail 
-                    key={user.id} 
-                    rank={position} 
-                    name={user.name} 
-                    studentId={user.universityId} 
-                    points={getUserTopicPoints(user, currentTopicRanking) || 0} 
-                    isTeacher={false}
-                    id={user.id}
-                  />
-                )
-              })
-            }
-          </div>
-        </div>
-      }
-      {studentUser.profile.name === 'senpai' && userClasses && <SenpaiActions userClass={userClasses} userId={studentUser.id}/>}
+      {studentUser.profile.name === 'senpai' && userClasses && <SenpaiActions students={senpaiStudents} userClass={userClasses} userId={studentUser.id}/>}
+      {studentUser.profile.name === 'senpai' && userClasses && <h2 className={styles['senpai-points']}>Points: {studentUser.classState.points}</h2>}
       {studentUser.profile.name === 'senpai' && studentUser.studentsId && (
         <div className={styles['senpai-students']}>
           <h3 className={styles['senpai-students__title']}>Apprentices</h3>
@@ -161,6 +123,45 @@ const StudentView: React.FC<StudentViewInterface> = ({studentUser}) => {
           ))}
         </div>
       )}
+      <div className={styles['ranking-container']}>
+        <h3 className={styles['ranking-title']}>Ranking</h3>
+        {studentUser.profile.name !== 'senpai' &&
+          <SelectDropDown placeholder={currentTopicRanking} ref={selectDropdownRef}>
+            <div>
+              { userClasses &&
+                ['General', ...userClasses?.topics.map(t => t.name)].map(topic => (
+                  <p 
+                    key={topic}
+                    className={styles['profile']}
+                    onClick={handleSetTopicRanking.bind(null, topic)}
+                  >
+                    {topic}
+                  </p>
+                ))
+              }
+            </div>
+          </SelectDropDown>
+        }
+        <div className={styles['ranking-users']}>
+          {loadingRankings && <LoaderLine/>}
+          {classUsers &&
+            classUsers.map((user, index) => {
+              position = setRankingPosition(classUsers, index, position)
+              return (
+                <UserThumbNail 
+                  key={user.id} 
+                  rank={position} 
+                  name={user.name} 
+                  studentId={user.universityId} 
+                  points={getUserTopicPoints(user, currentTopicRanking) || 0} 
+                  isTeacher={false}
+                  id={user.id}
+                />
+              )
+            })
+          }
+        </div>
+      </div>
     </div>
   )
 }

@@ -79,3 +79,7 @@
 .apprentice-info__name p {
   display: contents;
 }
+
+.senpai-points {
+  color: var(--main-white)
+}

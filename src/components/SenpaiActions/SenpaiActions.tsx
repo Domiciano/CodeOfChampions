@@ -12,29 +12,38 @@ import { pairingApprenicesenpai } from '../../store/class-slice';
 
 interface SenpaiActionsInterface {
   userClass: ClassType,
-  userId: string
+  userId: string,
+  students: StudentType[],
 }
 
 type StudentChecked = StudentType & {
   isChecked: boolean
 }
 
-const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId}) => {
+const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId, students}) => {
   const [modalActive, setModalActive] = useState(false);
   const [classUsers, setClassUsers] = useState<StudentChecked[]>([]);
+  const [classUsersQuantity, setClassUsersQuantity] = useState(students.length);
+
   const dispatch = useDispatch();
 
   const handleToggleMessageModal = () => {
-    setModalActive(prev => !prev)
+    setModalActive(prev => !prev);
+    setClassUsersQuantity(students.length);
   }
 
   const handleCheckStudent = (studentIndex: number) => {
-    console.log(classUsers[studentIndex]);
-    setClassUsers(prev => {
-      const copy = [...prev];
-      copy[studentIndex].isChecked = !copy[studentIndex].isChecked;
-      return copy;
-    })
+    const copy = [...classUsers];
+    const currentStudent = copy[studentIndex];
+    if(!currentStudent.isChecked && classUsersQuantity < 4){
+      copy[studentIndex].isChecked = true;
+      setClassUsers(copy);
+      setClassUsersQuantity(prev => prev + 1);
+    }else if(currentStudent.isChecked){
+      copy[studentIndex].isChecked = false;
+      setClassUsers(copy);
+      setClassUsersQuantity(prev => prev - 1);
+    }
   }
 
   const handleSubmit = () => {
@@ -43,7 +52,7 @@ const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId}) =>
     dispatch(pairingApprenicesenpai(db, userId, selectedStudents, () => {
       handleToggleMessageModal();
     }))
-    
+    setClassUsersQuantity(students.length);
   }
 
   useEffect(() => {
@@ -64,7 +73,7 @@ const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId}) =>
       {
         modalActive && 
         <Modal onCancelBtnAction={handleToggleMessageModal}>
-          {classUsers.length > 0 && <>
+          {classUsers.length > 0 && students.length < 4 && <>
             <div className={styles['user-to-select-container']}>
               {
                 classUsers.map((user, userIndex) => (
@@ -81,14 +90,20 @@ const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId}) =>
             </div>
             <MainBtn text={'Accept'} action={handleSubmit}/>
           </>}
-          {classUsers.length === 0 &&
+          {classUsers.length === 0 && students.length < 4 &&
             <div className={styles['no-apprentices']}>
               <h2>No Available Apprentices </h2>
+            </div>
+          }
+          {students.length >= 4 &&
+            <div className={styles['no-apprentices']}>
+              <h2>You have reached the maximum number of students</h2>
             </div>
           }
         </Modal>
       }
       <MainBtn text={'Adopt Apprentices'} action={handleToggleMessageModal}/>
+      
     </div>
   )
 }
