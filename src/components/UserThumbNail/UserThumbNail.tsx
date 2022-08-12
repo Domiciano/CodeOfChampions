@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import Arrow from '../UI/Arrow/Arrow';
 import ProgressBar from '../ProgressBar/ProgressBar'
 import { StudentType } from '../../types/user';
+import firstMedal from '../../img/first.png';
+import secondMedal from '../../img/second.png';
+import thirdMedal from '../../img/third.png';
 
 interface UserThumbNailInterface {
   rank: number;
@@ -17,13 +20,26 @@ interface UserThumbNailInterface {
 }
 
 const UserThumbNailContent: React.FC<UserThumbNailInterface> = ({ rank, name, studentId, points, id, isTeacher, listItem, user }) => {
+  const setMedal = (position: number) => {
+    switch (position) {
+      case 1: 
+        return <img src={firstMedal} alt="medal" />
+      case 2: 
+        return <img src={secondMedal} alt="medal" />
+      case 3: 
+        return <img src={thirdMedal} alt="medal" />
+    }
+  }
   return (
     <>
         {!listItem && <h2>{rank}</h2>}
         <div className={styles['user-thumb__info']}>
           <div className={styles['user-thumb__header']}>
             <h3>{name}</h3>
-            <p><b>{points}</b> pt</p>
+            <div className={styles['user-thumb__aside']}>
+              <p><b>{points}</b> pt</p>
+              {rank <= 3 && setMedal(rank)}
+            </div>
           </div>
           {isTeacher && 
             <>

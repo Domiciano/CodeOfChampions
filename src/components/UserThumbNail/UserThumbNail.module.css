@@ -70,3 +70,14 @@
   color: var(--second-white);
   
 }
+
+.user-thumb__aside {
+  display: flex;
+  align-items: center;
+  gap: var(--size2);
+}
+
+.user-thumb__aside img {
+  display: block;
+  width: 40px;
+}
