@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setOnAuthState } from '../../store/userAuth-slice';
 import { db, auth } from '../../utils/firebase-functions/getFirebaseInit';
@@ -14,16 +14,24 @@ import StudentDetail from '../StudentDetail/StudentDetail';
 import CreateClass from '../../pages/CreateClass/CreateClass';
 import StudentTopicsDetail from '../../pages/StudentTopicsDetail/StudentTopicsDetail';
 import EditClass from '../../pages/EditClass/EditClass';
+import StartAnimation from '../StartAnimation/StartAnimation';
 
 
 const  App = () => {
+  const [animationActive, setAnimationActive] = useState(true);
   const dispatch = useDispatch();  
   useEffect(() => {
     dispatch(setOnAuthState(auth, db));
+
+    const timer = setTimeout(() => {
+      setAnimationActive(false);
+    }, 2220);
+    return () => clearTimeout(timer);
   }, [dispatch]);
 
   return (
     <>
+      {animationActive && <StartAnimation/>}
       <Routes>
         <Route path="/" element={<Home/>} ></Route>
         <Route path="/test" element={<TestCompo/>} ></Route>

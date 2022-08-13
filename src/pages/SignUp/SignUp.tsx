@@ -46,10 +46,13 @@ const SignUp = () => {
     } })
   }
   useEffect(() => {
+    setIsLoading(true);
     if (!(role === 'teacher' || role === 'student')){
       navigate('/login')
     }
-    dispatch(getActiveClasses(db));
+    dispatch(getActiveClasses(db, () => {
+      setIsLoading(false);
+    }));
   }, [dispatch, navigate, role])
 
   const handleClassThumbClick = (classData: SelectClassType) => {

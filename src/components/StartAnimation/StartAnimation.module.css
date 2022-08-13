@@ -1,0 +1,14 @@
+.container {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: var(--main-black);
+}
+
+.container img {
+  width: 100%;
+  mix-blend-mode: lighten;
+}

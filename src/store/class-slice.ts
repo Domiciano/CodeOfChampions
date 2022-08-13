@@ -115,7 +115,7 @@ export const getStudentClass = (db: Firestore, classId: string) => {
   };
 };
 
-export const getActiveClasses = (db: Firestore) => {
+export const getActiveClasses = (db: Firestore, callback?: Function) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     const activeClasses = query(
       collection(db, "classes"),
@@ -153,9 +153,8 @@ export const getActiveClasses = (db: Firestore) => {
     names.forEach((n, index) => {
       currentClasses[index].teacherName = n.data().name;
     });
-    dispatch(
-      classSlice.actions.fetchClassesToSelect({ classes: currentClasses })
-    );
+    dispatch(classSlice.actions.fetchClassesToSelect({ classes: currentClasses }));
+    if(callback) callback();
   };
 };
 
