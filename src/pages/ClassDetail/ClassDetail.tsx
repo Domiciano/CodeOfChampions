@@ -36,10 +36,14 @@ const ClassDetail = () => {
     }
   };
 
-  const filterStudentsByProfile = useCallback((profile: string) => {
-    setFilteredUsers(classUsers.filter(u => {
+  const handleFilterByProfile = (users: StudentType[], profile: string) => {
+    return users.filter(u => {
       return u.profile.name.toLowerCase() === profile.toLowerCase()
-    }).sort((a,b) => b.classState.points - a.classState.points))
+    })
+  }
+
+  const filterStudentsByProfile = useCallback((profile: string) => {
+    setFilteredUsers(handleFilterByProfile(classUsers, profile).sort((a,b) => b.classState.points - a.classState.points))
     setSelectedProfileFilter(profile);
   }, [classUsers]);
 
@@ -105,7 +109,7 @@ const ClassDetail = () => {
               color: `var(--${profile.name.toLowerCase()}-color)`
             }}
           >
-              {profile.name}
+              {profile.name} ({handleFilterByProfile(classUsers, profile.name).length})
             </button>
         ))}
       </article>

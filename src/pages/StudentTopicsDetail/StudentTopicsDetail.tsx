@@ -209,17 +209,22 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
                         <div className={styles['activity']}>
                           <p 
                             className={styles['activity-tag']} 
-                            style={{
-                              color: ta.state === "complete" ?  "var(--app-color)" : "",
-                            }}
                           >
                             {taIndex+1} {activityClassData?.name}
                           </p>
-                          {editing && <SelectDropDown placeholder={ta.state} ref={activityStateRef}>
-                            {activityStateOPtions.map(activityState => (
-                              <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
-                            ))}
-                          </SelectDropDown>}
+                          {editing && 
+                            <SelectDropDown 
+                              placeholder={ta.state} 
+                              ref={activityStateRef}
+                              style={{
+                                border: ta.state === "complete" ?  "2px solid var(--app-color)" : "",
+                              }}
+                            >
+                              {activityStateOPtions.map(activityState => (
+                                <p className={styles['state-options']} onClick={handleActivityState.bind(null, topicIndex, taIndex, activityState)} key={activityState}>{activityState}</p>
+                              ))}
+                            </SelectDropDown>
+                          }
                           {editing && 
                             <button
                               type='button' 

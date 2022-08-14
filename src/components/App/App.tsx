@@ -25,7 +25,7 @@ const  App = () => {
 
     const timer = setTimeout(() => {
       setAnimationActive(false);
-    }, 2220);
+    }, 2420);
     return () => clearTimeout(timer);
   }, [dispatch]);
 

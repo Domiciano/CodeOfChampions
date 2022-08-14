@@ -8,9 +8,10 @@ interface SelectDropDownInterface {
   ref: React.Ref<unknown> | null;
   error?: boolean;
   allowActive?: boolean;
+  style?: React.CSSProperties;
 }
 
-const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ children, placeholder, error, allowActive}, ref) => {
+const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ children, placeholder, error, allowActive, style}, ref) => {
   const [isActive, setIsActive] = useState(false);
   const handleToggleOptions = () => {
     if(allowActive !== false){
@@ -29,12 +30,13 @@ const SelectDropDown: React.FC<SelectDropDownInterface> = React.forwardRef(({ ch
     <div 
       className={styles['select-dropdown']}
       style={{
-        opacity: allowActive !== false ? 1 : 0.3
+        opacity: allowActive !== false ? 1 : 0.3,
       }}
     >
       <div 
         className={`${styles['select-dropdown__input']} ${isActive ? styles['select-dropdown__input--active'] : ''} ${error ? styles['error'] : ''}`}
         onClick={handleToggleOptions}
+        style={style}
       >
         <p>{placeholder}</p>
         <img src={pointerIcon} alt="pointer"/>
