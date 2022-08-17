@@ -45,6 +45,7 @@ const Login = () => {
     }, (errorCode, errorMessage) => {
       console.log(errorCode, errorMessage);
       setErrorMessage(errorMessage.split('/')[1].replace(').', '').replace('-', ' '));
+      setIsLoading(false)
     }))
   }
   return (
