@@ -35,7 +35,7 @@ const ClassDetail = () => {
       return position + 1
     }
   };
-
+  console.log('XD')
   const handleFilterByProfile = (users: StudentType[], profile: string) => {
     return users.filter(u => {
       return u.profile.name.toLowerCase() === profile.toLowerCase()
@@ -44,8 +44,9 @@ const ClassDetail = () => {
 
   const filterStudentsByProfile = useCallback((profile: string) => {
     setFilteredUsers(handleFilterByProfile(classUsers, profile).sort((a,b) => b.classState.points - a.classState.points))
+    handleSetTopicRanking(currentTopicRanking);
     setSelectedProfileFilter(profile);
-  }, [classUsers]);
+  }, [classUsers, currentTopicRanking]);
 
   const handleSetTopicRanking = (topic: string) => {
     setCurrentTopicRanking(topic);
