@@ -47,7 +47,6 @@ const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId, stu
   }
 
   const handleSubmit = () => {
-    console.log(classUsers.filter(student => student.isChecked))
     const selectedStudents = classUsers.filter(student => student.isChecked).map(s => s.id);
     dispatch(pairingApprenicesenpai(db, userId, selectedStudents, () => {
       handleToggleMessageModal();
@@ -59,7 +58,6 @@ const SenpaiActions: React.FC<SenpaiActionsInterface> = ({userClass, userId, stu
     getStudentsFromClass(db, userClass.classId)
     .then(usersData => {
       setClassUsers(usersData.filter(user => {
-        console.log(user.senpaiId, 'sd')
         return (
           user.profile.name === 'Apprentice' &&
           user.senpaiId === ''

@@ -38,7 +38,6 @@ const TestCompo = () => {
       <TextInput 
         icon={<Lock style={styles['icon']} />} 
         onChangeInputValue={(value: string) => {
-          // console.log(value)
         }}
         placeholder="Write a strong password"
         label="Password"

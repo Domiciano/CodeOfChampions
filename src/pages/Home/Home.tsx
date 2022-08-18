@@ -18,7 +18,6 @@ const Home = () => {
   
   useEffect(() => {
     if(!isFetchingCurrentUser){
-      console.log('AAA', isLoggedIn);
       // * At this moment, the fetch process is finished
       // TODO: Check if there is a user login
       if(!isLoggedIn){
@@ -26,7 +25,6 @@ const Home = () => {
       }  
     }
     if(loggedUser?.role === 'teacher' && isTeacherType(loggedUser)){
-      console.log('TEACHER', loggedUser.isVerified);
       if(!loggedUser.isVerified){
         dispatch(logOutUser(auth, () => {
           navigate("/teacher-pending");

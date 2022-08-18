@@ -31,19 +31,16 @@ const Login = () => {
   useEffect(() => {
     if(isLoggedIn){
       navigate("/");
-      console.log('ehhh??');
     }
   }, [isFetchingCurrentUser, isLoggedIn, navigate])
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(email, password);
     dispatch(logUserAsync(auth, db, email, password, () =>{
       setIsLoading(false);
       navigate('/');
     }, (errorCode, errorMessage) => {
-      console.log(errorCode, errorMessage);
       setErrorMessage(errorMessage.split('/')[1].replace(').', '').replace('-', ' '));
       setIsLoading(false)
     }))

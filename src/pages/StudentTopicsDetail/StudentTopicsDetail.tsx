@@ -90,12 +90,9 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
         if(!currentUserData) return
         const studentData = setUserDataFromObj(currentUserData);
         if(!isStudentType(studentData)) return
-        console.log(studentData.classState.points)
         studentData?.classState.topics.forEach((t, tIndex) => {
           if(t.topicActivities.every(ta => ta.state === "complete")){
-            console.log('no mensaje para', t.name)
           }else if(currentUser?.classState.topics[tIndex].topicActivities.every(ta => ta.state === "complete")){
-            console.log("Mensaje para", t.name)
             sendMessage(db, userId, {
               code: "Congratulations",
               content: `You did a great job completing the level ${t.name} successfully`,
@@ -107,7 +104,6 @@ const StudentTopicsDetail: React.FC<StudentTopicsDetailInterface> = ({editing}) 
           updateStudentClassState(db, currentUser?.id, currentUser.classState, () => {
             if(studentData.profile.name.toLocaleLowerCase() === "apprentice"){
               if(studentData.senpaiId && studentData.senpaiId !== ''){
-                console.log(studentData, 'AAAA')
                 updateSenpai(db, studentData.senpaiId)
                   .then(() => {
                     navigate(`/class-detail/${currentUser?.belongedClassId}`);

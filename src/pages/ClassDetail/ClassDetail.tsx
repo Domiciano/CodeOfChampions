@@ -35,7 +35,6 @@ const ClassDetail = () => {
       return position + 1
     }
   };
-  console.log('XD')
   const handleFilterByProfile = (users: StudentType[], profile: string) => {
     return users.filter(u => {
       return u.profile.name.toLowerCase() === profile.toLowerCase()

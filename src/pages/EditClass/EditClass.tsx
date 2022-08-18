@@ -51,12 +51,10 @@ const EditClass = () => {
   }
 
   const handleDeleteActivity = (currentTopic: TopicDataType, activityIndex: number, profileActivityIndex: number) => {
-    console.log(profileActivityIndex)
     setTopics(prev => {
       if(prev){
         const topicIndex = prev.findIndex(p => p.name === currentTopic.name);
         let prevCopy = [...prev];
-        console.log(prevCopy[topicIndex].activities[activityIndex].profileActivities)
         prevCopy[topicIndex].activities[activityIndex].profileActivities.splice(profileActivityIndex, 1);
         return prevCopy;
       }
@@ -118,7 +116,6 @@ const EditClass = () => {
 
   useEffect(() => {
     if(!isFetchingCurrentUser){
-      console.log('AAA', isLoggedIn);
       // * At this moment, the fetch process is finished
       // TODO: Check if there is a user login
       if(!isLoggedIn){

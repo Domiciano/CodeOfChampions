@@ -52,7 +52,6 @@ export const updateStudentAsync = (db: Firestore, userId: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     const docRef = doc(db, "users", userId);
     const docSnap = await getDoc(docRef);
-    console.log(docSnap.data(), '🔥');
     const currentUserData = docSnap.data();
     if (currentUserData === undefined) return;
     dispatch(userLoginSlice.actions.updateStudent({
@@ -99,7 +98,6 @@ export const setOnAuthState = (auth: Auth, db: Firestore) => {
       dispatch(userLoginSlice.actions.setFetchingCurrentUserState({ state: true }));
       if (user) {
         // User is signed in, see docs for a list of available properties
-        console.log("There is a user");
         getCurrentUser(user.uid, db)
           .then((currentUserDoc) => {
             const docData = currentUserDoc.data();
