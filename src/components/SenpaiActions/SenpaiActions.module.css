@@ -1,5 +1,7 @@
 .user-to-select-container {
   padding: var(--size2) 0;
+  height: 70vh;
+  overflow-y: scroll;
 }
 
 .user-to-select {
